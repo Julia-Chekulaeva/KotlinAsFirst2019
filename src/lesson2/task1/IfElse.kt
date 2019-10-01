@@ -150,8 +150,8 @@ fun rookOrBishopThreatens(
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
     var max = a
-    val s1
-    val s2
+    val x1
+    val x2
     if (b < max)
         s1 = b
     else {
@@ -159,9 +159,9 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
         max = b
     }
     if (c < max)
-        s2 = c
+        x2 = c
     else {
-        s2 = max
+        x2 = max
         max = c
     }
     return when {
