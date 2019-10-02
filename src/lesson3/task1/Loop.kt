@@ -194,7 +194,7 @@ fun sin(x: Double, eps: Double): Double {
     var i = 1
     var b = x
     var sin = 0.0
-    while (b > eps){
+    while (b >= eps){
         sin += b
         i += 2
         b = -b * x * x / (i * (i - 1))
@@ -212,9 +212,9 @@ fun sin(x: Double, eps: Double): Double {
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double {
-    var i = 0
-    var a = 1.0
-    var cos = 0.0
+    var i = 2
+    var a = -a * x * x / (i * (i - 1))
+    var cos = 1.0
     while (a >= eps){
         cos += a
         i += 2
