@@ -219,7 +219,6 @@ fun cos(x: Double, eps: Double): Double {
         cos += b
         i += 2
         b = -b * x * x / (i * (i - 1))
-        cos += b
     }
     return cos
 }
