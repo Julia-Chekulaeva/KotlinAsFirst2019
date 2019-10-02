@@ -170,7 +170,16 @@ fun squareBetweenExists(m: Int, n: Int): Boolean = (sqrt(n.toDouble()).toInt() *
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int = TODO()
+fun collatzSteps(x: Int): Int {
+    var x1 = x
+    var i = 0
+    while (x1 > 1){
+        i += 1
+        if (x1 % 2 == 0) x1 = x1 / 2
+        else x1 = x1 * 3 + 1
+    }
+    return i
+}
 
 /**
  * Средняя
@@ -181,7 +190,17 @@ fun collatzSteps(x: Int): Int = TODO()
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
-fun sin(x: Double, eps: Double): Double = TODO()
+fun sin(x: Double, eps: Double): Double {
+    var i = 1
+    var b = x
+    var sin = b
+    while (b < eps){
+        i += 2
+        b *= - x * x / (i * (i - 1))
+        sin += b
+    }
+    return sin
+}
 
 /**
  * Средняя
@@ -192,7 +211,17 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+fun cos(x: Double, eps: Double): Double {
+    var i = 0
+    var b = 1
+    var cos = b
+    while (b < eps){
+        i += 2
+        b *= - x * x / (i * (i - 1))
+        cos += b
+    }
+    return cos
+}
 
 /**
  * Средняя
@@ -201,7 +230,15 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var num = n
+    var rev = 1
+    while (num > 0){
+        rev = rev * 10 + num % 10
+        num /= 10
+    }
+    return rev
+}
 
 /**
  * Средняя
@@ -212,7 +249,7 @@ fun revert(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean = n == revert(n)
 
 /**
  * Средняя
@@ -222,7 +259,15 @@ fun isPalindrome(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var n1 = n
+    val digit = n % 10
+    while (n1 > 0){
+        if (n1 % 10 != digit) return true
+        n1 /= 10
+    }
+    return false
+}
 
 /**
  * Сложная
