@@ -294,7 +294,7 @@ fun squareSequenceDigit(n: Int): Int {
     val num = sqrt(border - 1.0).toInt() - (lenght - n) / i
     val digitNumber = (lenght - n) % i
     var square = num * num
-    for (s in 1..i)
+    for (s in 1..digitNumber)
         square = square / 10
     return square % 10
 }
