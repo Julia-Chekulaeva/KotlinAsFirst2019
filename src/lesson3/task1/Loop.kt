@@ -191,15 +191,15 @@ fun collatzSteps(x: Int): Int {
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
 fun sin(x: Double, eps: Double): Double {
-    var i = 1
+    var i = 1.0
     var b = x
-    var modB = if (b >= 0) b else -b
+    var modB = if (b >= 0.0) b else -b
     var sin = x
     while (modB >= eps){
-        i += 2
-        b = -b * x * x / (i * (i - 1))
-        modB = if (b >= 0) b else -b
-        sin += b
+        i = i + 2.0
+        b = -b * x * x / (i * (i - 1.0))
+        modB = if (b >= 0.0) b else -b
+        sin = sin + b
     }
     return sin
 }
@@ -214,15 +214,15 @@ fun sin(x: Double, eps: Double): Double {
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double {
-    var i = 0
+    var i = 0.0
     var a = 1.0
-    var modA = if (a >= 0) a else -a
+    var modA = if (a >= 0.0) a else -a
     var cos = 1.0
     while (modA >= eps){
-        i += 2
-        a = -a * x * x / (i * (i - 1))
-        modA = if (a >= 0) a else -a
-        cos += a
+        i = i + 2.0
+        a = -a * x * x / (i * (i - 1.0))
+        modA = if (a >= 0.0 a else -a
+        cos = cos + a
     }
     return cos
 }
