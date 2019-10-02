@@ -150,12 +150,12 @@ fun rookOrBishopThreatens(
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
     var max = a
-    val x1
-    val x2
+    val x1: Double
+    val x2: Double
     if (b < max)
-        s1 = b
+        x1 = b
     else {
-        s1 = max
+        x1 = max
         max = b
     }
     if (c < max)
@@ -165,9 +165,9 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
         max = c
     }
     return when {
-        max * max < s1 * s1 + s2 * s2 -> 0
-        max * max = s1 * s1 + s2 * s2 -> 1
-        max >= s1 + s2 -> -1
+        max * max < x1 * x1 + x2 * x2 -> 0
+        max * max = x1 * x1 + x2 * x2 -> 1
+        max >= x1 + x2 -> -1
         else -> 2 // Эта строка работает, т.к. остается только вариант max * max > s1 * s1 + s2 * s2 && max < s1 + s2
     }
 }
@@ -181,8 +181,8 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    val left
-    val right
+    val left: Int
+    val right: Int
     left = if (a > c) a
     else c
     right = if (b < d) b

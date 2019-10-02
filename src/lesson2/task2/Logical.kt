@@ -54,6 +54,7 @@ fun daysInMonth(month: Int, year: Int): Int = when (month){
     12 -> 31
     2 -> if (year % 4 == 0 && year % 100 > 0 || year % 400 == 0) 29
     else 28
+    else -> -1 // Такого месяца не существует, поэтому я надеюсь, что вводиться он не будет
 }
 
 /**
