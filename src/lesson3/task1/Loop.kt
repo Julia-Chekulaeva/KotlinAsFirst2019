@@ -309,9 +309,9 @@ fun squareSequenceDigit(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int {
-    var length = 1 // Та же длина строки, но теперь прямо до нужного числа
+    var length = 0 // Та же длина строки, но теперь прямо до нужного числа
     var i = 0 // Та же длина числа
-    var ind = 1 // Номер числа
+    var ind = 0 // Номер числа
     var border = 1 // Та же "граница"
     while (length < n){
         i += 1
@@ -322,6 +322,6 @@ fun fibSequenceDigit(n: Int): Int {
         }
     }
     var num = fib(ind)
-    for (k in 1..(length - n)) num = num / 10
+    for (k in 1..(length - n + 1)) num = num / 10
     return num % 10
 }
