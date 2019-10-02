@@ -194,7 +194,7 @@ fun sin(x: Double, eps: Double): Double {
     var i = 1
     var b = x
     var sin = 0.0
-    while (b < eps){
+    while (b > eps){
         sin += b
         i += 2
         b = -b * x * x / (i * (i - 1))
@@ -215,7 +215,7 @@ fun cos(x: Double, eps: Double): Double {
     var i = 0
     var a = 1.0
     var cos = 0.0
-    while (a < eps){
+    while (a >= eps){
         cos += a
         i += 2
         a = -a * x * x / (i * (i - 1))
