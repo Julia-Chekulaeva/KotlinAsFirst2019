@@ -194,12 +194,12 @@ fun sin(x: Double, eps: Double): Double {
     var i = 1
     var b = x
     var modB = if (b >= 0) b else -b
-    var sin = 0.0
+    var sin = x
     while (modB >= eps){
-        sin += b
         i += 2
         b = -b * x * x / (i * (i - 1))
         modB = if (b >= 0) b else -b
+        sin += b
     }
     return sin
 }
@@ -214,15 +214,15 @@ fun sin(x: Double, eps: Double): Double {
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double {
-    var i = 2
-    var a = -x * x / (i * (i - 1))
+    var i = 0
+    var a = 1.0
     var modA = if (a >= 0) a else -a
     var cos = 1.0
     while (modA >= eps){
-        cos += a
         i += 2
         a = -a * x * x / (i * (i - 1))
         modA = if (a >= 0) a else -a
+        cos += a
     }
     return cos
 }
