@@ -69,7 +69,7 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  */
 fun digitNumber(n: Int): Int {
     if (n == 0) return 1
-    var s = n
+    var s = if (n > 0) n else -n
     var i = 0
     while (s > 0){
         i += 1
@@ -87,7 +87,7 @@ fun digitNumber(n: Int): Int {
 fun fib(n: Int): Int = when (n){
     1 -> 1
     2 -> 1
-    else -> fib(n -1) + fib(n - 2)
+    else -> fib(n / 2 + 1) * fib(n - n / 2) + fib(n / 2) * fib(n - n / 2 - 1)
 }
 
 /**
@@ -139,8 +139,8 @@ fun isCoPrime(m: Int, n: Int): Boolean {
     var s1 = m
     var s2 = n
     while (s1 != s2) {
-        if (s1 > s2) s2 -= s1
-        else s1 -= s2
+        if (s1 > s2) s1 -= s2
+        else s2 -= s1
     }
     return s1 == 1
 }
