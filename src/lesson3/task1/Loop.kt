@@ -193,11 +193,11 @@ fun collatzSteps(x: Int): Int {
 fun sin(x: Double, eps: Double): Double {
     var i = 1
     var b = x
-    var sin = b
+    var sin = 0
     while (b < eps){
-        i += 2
-        b *= - x * x / (i * (i - 1))
         sin += b
+        i += 2
+        b = -b * x * x / (i * (i - 1))
     }
     return sin
 }
@@ -214,10 +214,11 @@ fun sin(x: Double, eps: Double): Double {
 fun cos(x: Double, eps: Double): Double {
     var i = 0
     var b = 1.0
-    var cos = b
+    var cos = 0
     while (b < eps){
+        cos += b
         i += 2
-        b *= - x * x / (i * (i - 1))
+        b = -b * x * x / (i * (i - 1))
         cos += b
     }
     return cos
@@ -232,7 +233,7 @@ fun cos(x: Double, eps: Double): Double {
  */
 fun revert(n: Int): Int {
     var num = n
-    var rev = 1
+    var rev = 0
     while (num > 0){
         rev = rev * 10 + num % 10
         num /= 10
