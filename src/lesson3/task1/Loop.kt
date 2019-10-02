@@ -67,7 +67,16 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun digitNumber(n: Int): Int = if (n > 0) 1 + digitNumber(n / 10) else 0
+fun digitNumber(n: Int): Int {
+    if (n == 0) return 1
+    var s = n
+    var i = 0
+    while (s > 0){
+        i += 1
+        s /= 10
+    }
+    return i
+}
 
 /**
  * Простая
@@ -78,7 +87,7 @@ fun digitNumber(n: Int): Int = if (n > 0) 1 + digitNumber(n / 10) else 0
 fun fib(n: Int): Int = when (n){
     1 -> 1
     2 -> 1
-    else -> fib(n -1) + fib(n - 1)
+    else -> fib(n -1) + fib(n - 2)
 }
 
 /**
@@ -127,10 +136,13 @@ fun maxDivisor(n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    var s = m
-    while (s % n > 0)
-        s += m // Поиск наим. общего кратного
-    return s == m * n
+    var s1 = m
+    var s2 = n
+    while (s1 != s2) {
+        if (s1 > s2) s2 -= s1
+        else s1 -= s2
+    }
+    return s1 == 1
 }
 
 /**
