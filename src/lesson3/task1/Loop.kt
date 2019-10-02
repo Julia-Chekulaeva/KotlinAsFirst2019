@@ -221,7 +221,7 @@ fun cos(x: Double, eps: Double): Double {
     while (modA >= eps){
         i = i + 2.0
         a = -a * x * x / (i * (i - 1.0))
-        modA = if (a >= 0.0 a else -a
+        modA = if (a >= 0.0) a else -a
         cos = cos + a
     }
     return cos
@@ -293,10 +293,10 @@ fun squareSequenceDigit(n: Int): Int {
     }
     val num = sqrt(border - 1.0).toInt() - (lenght - n) / i
     val digitNumber = (lenght - n) % i
-    var square = num * num
+    var squareN = num * num
     for (s in 1..digitNumber)
-        square = square / 10
-    return square % 10
+        squareN = squareN / 10
+    return squareN % 10
 }
 
 /**
