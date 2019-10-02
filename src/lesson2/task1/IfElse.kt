@@ -166,7 +166,7 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     }
     return when {
         max * max < x1 * x1 + x2 * x2 -> 0
-        max * max = x1 * x1 + x2 * x2 -> 1
+        max * max == x1 * x1 + x2 * x2 -> 1
         max >= x1 + x2 -> -1
         else -> 2 // Эта строка работает, т.к. остается только вариант max * max > s1 * s1 + s2 * s2 && max < s1 + s2
     }
