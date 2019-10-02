@@ -213,12 +213,12 @@ fun sin(x: Double, eps: Double): Double {
  */
 fun cos(x: Double, eps: Double): Double {
     var i = 0
-    var b = 1.0
+    var a = 1.0
     var cos = 0.0
-    while (b < eps){
-        cos += b
+    while (a < eps){
+        cos += a
         i += 2
-        b = -b * x * x / (i * (i - 1))
+        a = -a * x * x / (i * (i - 1))
     }
     return cos
 }
