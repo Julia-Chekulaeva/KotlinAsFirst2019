@@ -283,16 +283,16 @@ fun hasDifferentDigits(n: Int): Boolean {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun squareSequenceDigit(n: Int): Int {
-    var lenght = 0
-    var i = 0
+    var length = 0 // Длина строчки до какой-то "границы" чисел с разным размером (10, 100 и т.д. - границы)
+    var i = 0 // Длина (размер) чисел
     var border = 1.0
-    while (lenght < n) {
+    while (length < n) {
         border *= 10.0
         i += 1
-        lenght += (sqrt(border - 1.0).toInt() - sqrt((border / 10) - 1.0).toInt()) * i
+        length += (sqrt(border - 1.0).toInt() - sqrt((border / 10) - 1.0).toInt()) * i
     }
-    val num = sqrt(border - 1.0).toInt() - (lenght - n) / i
-    val digitNumber = (lenght - n) % i
+    val num = sqrt(border - 1.0).toInt() - (length - n) / i // Ищу число, в квадрате которого искомая цифра
+    val digitNumber = (length - n) % i // На каком она месте (начиная с низших разрядов)
     var squareN = num * num
     for (s in 1..digitNumber)
         squareN = squareN / 10
@@ -308,4 +308,20 @@ fun squareSequenceDigit(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var length = 1 // Та же длина строки, но теперь прямо до нужного числа
+    var i = 0 // Та же длина числа
+    var ind = 1 // Номер числа
+    var border = 1 // Та же "граница"
+    while (length < n){
+        i += 1
+        border *= 10
+        while (fib(ind) < border && length < n) {
+            ind += 1
+            length += i
+        }
+    }
+    var num = fib(ind)
+    for (k in 1..(length - n)) num = num / 10
+    return num % 10
+}
