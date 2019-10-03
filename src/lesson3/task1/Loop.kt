@@ -316,13 +316,9 @@ fun fibSequenceDigit(n: Int): Int {
     while (length < n){
         i += 1
         border *= 10
-        while (fib(ind) < border && length < n) {
+        while (fib(ind + 1) < border && length < n) {
             ind += 1
             length += i
-        }
-        if (fib(ind) >= border) {
-            ind -= 1
-            length -= i
         }
     }
     var num = fib(ind)
