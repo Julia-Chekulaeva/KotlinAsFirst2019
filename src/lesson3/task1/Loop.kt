@@ -320,6 +320,10 @@ fun fibSequenceDigit(n: Int): Int {
             ind += 1
             length += i
         }
+        if (fib(ind) >= border){
+            ind -= 1
+            length -= i
+        }
     }
     var num = fib(ind)
     var k = 0
