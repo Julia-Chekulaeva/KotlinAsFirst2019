@@ -320,7 +320,7 @@ fun fibSequenceDigit(n: Int): Int {
             ind += 1
             length += i
         }
-        if (fib(ind) >= border){
+        if (fib(ind) >= border && length < n){
             ind -= 1
             length -= i
         }
