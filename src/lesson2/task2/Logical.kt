@@ -3,6 +3,7 @@
 package lesson2.task2
 
 import lesson1.task1.sqr
+import kotlin.math.*
 
 /**
  * Пример
@@ -40,7 +41,7 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
  * Дан номер месяца (от 1 до 12 включительно) и год (положительный).
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
-fun daysInMonth(month: Int, year: Int): Int = when (month){
+fun daysInMonth(month: Int, year: Int): Int = when (month) {
     1 -> 31
     3 -> 31
     4 -> 30
@@ -70,7 +71,7 @@ fun circleInside(
 ): Boolean {
     val x = x1 - x2
     val y = y1 - y2
-    val R = kotlin.math.sqrt(x * x + y * y)
+    val R = sqrt(x * x + y * y)
     return r2 >= R + r1
 }
 

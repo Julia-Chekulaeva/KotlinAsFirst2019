@@ -66,7 +66,7 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
 fun ageDescription(age: Int): String =
     if ((age / 10) % 10 == 1) // Это числа 10 - 19
         "$age лет"
-    else when (age % 10){
+    else when (age % 10) {
         1 -> "$age год"
         2 -> "$age года"
         3 -> "$age года"
@@ -87,16 +87,12 @@ fun timeForHalfWay(
     t3: Double, v3: Double
 ): Double {
     val halfway = (v1 * t1 + v2 * t2 + v3 * t3) / 2
-    if (halfway <= t1 * v1)
-        return halfway / v1
-    else if (halfway <= t1 * v1 + t2 * v2){
-        val diffway1 = halfway - t1 * v1
-        return t1 + diffway1 / v2
+    when {
+        halfway <= t1 * v1 -> halfway / v1
+        halfway <= t1 * v1 + t2 * v2 -> t1 + (halfway - t1 * v1) / v2
+        else -> t1 + t2 + (halfway - t1 * v1 - t2 * v2) / v3
     }
-    else {
-        val diffway2 = halfway - t1 * v1 - t2 * v2
-        return t1 + t2 + diffway2 / v3
-    }
+
 }
 
 /**
@@ -149,21 +145,9 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    var max = a
-    val x1: Double
-    val x2: Double
-    if (b < max)
-        x1 = b
-    else {
-        x1 = max
-        max = b
-    }
-    if (c < max)
-        x2 = c
-    else {
-        x2 = max
-        max = c
-    }
+    val max = maxOf(a, b, c)
+    val x1 = maxof(minOf(a, b), minOf(a, c), minOf(b, c))
+    val x2 = minof(a, b, c)
     return when {
         max * max < x1 * x1 + x2 * x2 -> 0
         max * max == x1 * x1 + x2 * x2 -> 1
@@ -181,11 +165,9 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    val left: Int
-    val right: Int
-    left = if (a > c) a
+    val left = if (a > c) a
     else c
-    right = if (b < d) b
+    val right = if (b < d) b
     else d
     return if (right >= left) right - left
     else -1

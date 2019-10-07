@@ -69,9 +69,9 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  */
 fun digitNumber(n: Int): Int {
     if (n == 0) return 1
-    var s = if (n > 0) n else -n
+    var s = abs(n)
     var i = 0
-    while (s > 0){
+    while (s > 0) {
         i += 1
         s /= 10
     }
@@ -84,7 +84,7 @@ fun digitNumber(n: Int): Int {
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = when (n){
+fun fib(n: Int): Int = when (n) {
     1 -> 1
     2 -> 1
     else -> fib(n / 2 + 1) * fib(n - n / 2) + fib(n / 2) * fib(n - n / 2 - 1)
@@ -173,7 +173,7 @@ fun squareBetweenExists(m: Int, n: Int): Boolean = (sqrt(n.toDouble()).toInt() *
 fun collatzSteps(x: Int): Int {
     var x1 = x
     var i = 0
-    while (x1 > 1){
+    while (x1 > 1) {
         i += 1
         if (x1 % 2 == 0) x1 = x1 / 2
         else x1 = x1 * 3 + 1
@@ -195,7 +195,7 @@ fun sin(x: Double, eps: Double): Double {
     var b = x
     var modB = if (b >= 0.0) b else -b
     var sin = x
-    while (modB >= eps){
+    while (modB > eps) {
         i = i + 2.0
         b = -b * x * x / (i * (i - 1.0))
         modB = if (b >= 0.0) b else -b
@@ -217,14 +217,14 @@ fun cos(x: Double, eps: Double): Double {
     var i = 0.0
     var a = 1.0
     var modA = if (a >= 0.0) a else -a
-    var cos = 1.0
-    while (modA >= eps){
+    var sum = 1.0
+    while (modA > eps) {
         i = i + 2.0
         a = -a * x * x / (i * (i - 1.0))
         modA = if (a >= 0.0) a else -a
-        cos = cos + a
+        sum = sum + a
     }
-    return cos
+    return sum
 }
 
 /**
@@ -237,7 +237,7 @@ fun cos(x: Double, eps: Double): Double {
 fun revert(n: Int): Int {
     var num = n
     var rev = 0
-    while (num > 0){
+    while (num > 0) {
         rev = rev * 10 + num % 10
         num /= 10
     }
@@ -266,7 +266,7 @@ fun isPalindrome(n: Int): Boolean = n == revert(n)
 fun hasDifferentDigits(n: Int): Boolean {
     var n1 = n
     val digit = n % 10
-    while (n1 > 0){
+    while (n1 > 0) {
         if (n1 % 10 != digit) return true
         n1 /= 10
     }
@@ -312,8 +312,8 @@ fun fibSequenceDigit(n: Int): Int {
     var length = 0 // Та же длина строки, но теперь прямо до нужного числа
     var i = 0 // Та же длина числа
     var ind = 0 // Номер числа
-    var num = 0 // Та же "граница"
-    while (length < n){
+    var num = 0 // Рассматриваемое число Фибоначчи
+    while (length < n) {
         i = 0
         ind += 1
         num = fib(ind)
