@@ -87,12 +87,11 @@ fun timeForHalfWay(
     t3: Double, v3: Double
 ): Double {
     val halfway = (v1 * t1 + v2 * t2 + v3 * t3) / 2
-    when {
+    return when {
         halfway <= t1 * v1 -> halfway / v1
         halfway <= t1 * v1 + t2 * v2 -> t1 + (halfway - t1 * v1) / v2
         else -> t1 + t2 + (halfway - t1 * v1 - t2 * v2) / v3
     }
-
 }
 
 /**
@@ -136,6 +135,10 @@ fun rookOrBishopThreatens(
     return s
 }
 
+fun main() {
+
+}
+
 /**
  * Простая
  *
@@ -146,8 +149,8 @@ fun rookOrBishopThreatens(
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
     val max = maxOf(a, b, c)
-    val x1 = maxof(minOf(a, b), minOf(a, c), minOf(b, c))
-    val x2 = minof(a, b, c)
+    val x1 = maxOf(minOf(a, b), minOf(a, c), minOf(b, c))
+    val x2 = minOf(a, b, c)
     return when {
         max * max < x1 * x1 + x2 * x2 -> 0
         max * max == x1 * x1 + x2 * x2 -> 1

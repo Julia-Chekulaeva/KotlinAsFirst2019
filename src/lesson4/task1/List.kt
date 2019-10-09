@@ -203,14 +203,17 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
  */
 fun factorize(n: Int): List<Int> {
     var num = n
-    val multiplier: MutableList<Int> = listOf()
+    var i: Int
+    val multiplier: MutableList<Int> = mutableListOf()
     while (num > 1) {
-        for (i in 2..num) {
+        i = 0
+        while (i < num) {
             if (num % i == 0) {
                 multiplier.add(i)
                 num /= i
-                i = num + 1
+                i = num
             }
+            i += 1
         }
     }
     return multiplier
@@ -234,12 +237,14 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*
  */
 fun convert(n: Int, base: Int): List<Int> {
     var num = n
-    val numberInDigits: MutableList<Int> = listOf()
+    val numberInDigits: MutableList<Int> = mutableListOf()
     while (num > 0) {
         numberInDigits.add(0, num % base)
         num /= base
     }
-    return numberInDigits
+    val result: List<Int>
+    result = numberInDigits
+    return result
 }
 
 /**
@@ -256,7 +261,7 @@ fun convert(n: Int, base: Int): List<Int> {
 fun convertToString(n: Int, base: Int): String {
     var num = ""
     val listConv = convert(n, base)
-    for (i in 0 until convert.size) {
+    for (i in 0 until listConv.size) {
         num += if (listConv[i] < 10) "$listConv[i]"
         else when (i) {
             10 -> "a"
@@ -285,7 +290,8 @@ fun convertToString(n: Int, base: Int): String {
             33 -> "x"
             34 -> "y"
             35 -> "z"
-            36 -> " " // Я пока не понимаю, как можно записать эту цифру, на нее не хватает букв
+            36 -> "" // Я пока не понимаю, как можно записать эту цифру, на нее не хватает букв
+            else -> ""
         }
     }
     return num
@@ -325,42 +331,43 @@ fun decimalFromString(str: String, base: Int): Int {
     var multiplier = 1
     for (i in 0 until str.length) {
         result += multiplier * when (str[str.length - 1 - i]) {
-            "0" -> 0
-            "1" -> 1
-            "2" -> 2
-            "3" -> 3
-            "4" -> 4
-            "5" -> 5
-            "6" -> 6
-            "7" -> 7
-            "8" -> 8
-            "9" -> 9
-            "a" -> 10
-            "b" -> 11
-            "c" -> 12
-            "d" -> 13
-            "e" -> 14
-            "f" -> 15
-            "g" -> 16
-            "h" -> 17
-            "i" -> 18
-            "j" -> 19
-            "k" -> 20
-            "l" -> 21
-            "m" -> 22
-            "n" -> 23
-            "o" -> 24
-            "p" -> 25
-            "q" -> 26
-            "r" -> 27
-            "s" -> 28
-            "t" -> 29
-            "u" -> 30
-            "v" -> 31
-            "w" -> 32
-            "x" -> 33
-            "y" -> 34
-            "z" -> 35
+            '0' -> 0
+            '1' -> 1
+            '2' -> 2
+            '3' -> 3
+            '4' -> 4
+            '5' -> 5
+            '6' -> 6
+            '7' -> 7
+            '8' -> 8
+            '9' -> 9
+            'a' -> 10
+            'b' -> 11
+            'c' -> 12
+            'd' -> 13
+            'e' -> 14
+            'f' -> 15
+            'g' -> 16
+            'h' -> 17
+            'i' -> 18
+            'j' -> 19
+            'k' -> 20
+            'l' -> 21
+            'm' -> 22
+            'n' -> 23
+            'o' -> 24
+            'p' -> 25
+            'q' -> 26
+            'r' -> 27
+            's' -> 28
+            't' -> 29
+            'u' -> 30
+            'v' -> 31
+            'w' -> 32
+            'x' -> 33
+            'y' -> 34
+            'z' -> 35
+            else -> 1
         }
         multiplier *= base
     }
@@ -383,7 +390,7 @@ fun roman(n: Int): String {
     for (i in 0..12) {
         while (num >= listNum[i]) {
             res += listStr[i]
-            num -= listStr[i]
+            num -= listNum[i]
         }
     }
     return res
@@ -418,11 +425,19 @@ fun russian(n: Int): String  {
             else -> "тысяч"
         }
     }
-    if (thousands > 0 && units > 0) res += " "
-    if (units / 100 != 0) res += listStrHundreds[thousands / 100] + if (units % 100 > 0) " "
-    if ((units % 100) / 10 == 1) res += listStr10to19[units % 10]
+    if (thousands > 0 && units > 0) {
+        res += " "
+    }
+    if (units / 100 != 0) {
+        res += listStrHundreds[thousands / 100] + if (units % 100 > 0) " " else ""
+    }
+    if ((units % 100) / 10 == 1) {
+        res += listStr10to19[units % 10]
+    }
     else {
-        if ((thousands % 100) / 10 > 1) res += listStrDec[(thousands % 100) / 10] + if (units % 10 > 0) " "
+        if ((thousands % 100) / 10 > 1) {
+            res += listStrDec[(thousands % 100) / 10] + if (units % 10 > 0) " " else ""
+        }
         res += listStr1to9Thousands[thousands % 10]
     }
     return res
