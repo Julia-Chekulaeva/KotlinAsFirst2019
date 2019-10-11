@@ -212,7 +212,7 @@ fun factorize(n: Int): List<Int> {
     val multiplier: MutableList<Int> = mutableListOf()
     while (num > 1) {
         i = 2
-        while (i < num) {
+        while (i <= num) {
             if (num % i == 0) {
                 multiplier.add(i)
                 num /= i
@@ -268,7 +268,7 @@ fun convertToString(n: Int, base: Int): String {
     var num = ""
     val listConv = convert(n, base)
     for (i in 0 until listConv.size) {
-        num += if (listConv[i] < 10) "$listConv[i]"
+        num += if (listConv[i] < 10) "${listConv[i]}"
         else when (i) {
             10 -> "a"
             11 -> "b"
@@ -437,16 +437,16 @@ fun russian(n: Int): String  {
         }
     }
     if (units / 100 != 0) {
-        res += listStrHundreds[thousands / 100] + if (units % 100 > 0) " " else ""
+        res += listStrHundreds[units / 100] + if (units % 100 > 0) " " else ""
     }
     if ((units % 100) / 10 == 1) {
         res += listStr10to19[units % 10]
     }
     else {
-        if ((thousands % 100) / 10 > 1) {
-            res += listStrDec[(thousands % 100) / 10] + if (units % 10 > 0) " " else ""
+        if ((units % 100) / 10 > 1) {
+            res += listStrDec[(units % 100) / 10] + if (units % 10 > 0) " " else ""
         }
-        res += listStr1to9Thousands[thousands % 10]
+        res += listStr1to9Units[units % 10]
     }
     return res
 }
