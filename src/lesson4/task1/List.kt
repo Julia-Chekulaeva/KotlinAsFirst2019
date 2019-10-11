@@ -115,8 +115,12 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double = v.fold(0.0) {
-    previous, element -> previous + element * element
+fun abs(v: List<Double>): Double {
+    val s = v.fold(0.0) {
+            previous, element ->
+        previous + element * element
+    }
+    return sqrt(s)
 }
 
 /**
@@ -136,8 +140,9 @@ else 0.0
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
+    val a = mean(list)
     for (i in 0 until list.size) {
-        list[i] -= mean(list)
+        list[i] -= a
     }
     return list
 }
@@ -206,7 +211,7 @@ fun factorize(n: Int): List<Int> {
     var i: Int
     val multiplier: MutableList<Int> = mutableListOf()
     while (num > 1) {
-        i = 0
+        i = 2
         while (i < num) {
             if (num % i == 0) {
                 multiplier.add(i)
@@ -236,6 +241,7 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
 fun convert(n: Int, base: Int): List<Int> {
+    if (n == 0) return listOf(0)
     var num = n
     val numberInDigits: MutableList<Int> = mutableListOf()
     while (num > 0) {
@@ -415,18 +421,20 @@ fun russian(n: Int): String  {
         "восемьсот", "девятьсот")
     val thousands = n / 1000
     val units = n % 1000
-    if (thousands / 100 != 0) res += listStrHundreds[thousands / 100] + " "
-    if ((thousands % 100) / 10 == 1) res += listStr10to19[thousands % 10] + " тысяч"
-    else {
-        if ((thousands % 100) / 10 > 1) res += listStrDec[(thousands % 100) / 10] + " "
-        res += listStr1to9Thousands[thousands % 10] + when {
-            thousands % 10 == 1 -> "тысяча"
-            thousands % 10 > 1 && thousands % 10 < 5 -> "тысячи"
-            else -> "тысяч"
+    if (thousands > 0) {
+        if (thousands / 100 != 0) res += listStrHundreds[thousands / 100] + " "
+        if ((thousands % 100) / 10 == 1) res += listStr10to19[thousands % 10] + " тысяч"
+        else {
+            if ((thousands % 100) / 10 > 1) res += listStrDec[(thousands % 100) / 10] + " "
+            res += listStr1to9Thousands[thousands % 10] + when {
+                thousands % 10 == 1 -> "тысяча"
+                thousands % 10 > 1 && thousands % 10 < 5 -> "тысячи"
+                else -> "тысяч"
+            }
         }
-    }
-    if (thousands > 0 && units > 0) {
-        res += " "
+        if (units > 0) {
+            res += " "
+        }
     }
     if (units / 100 != 0) {
         res += listStrHundreds[thousands / 100] + if (units % 100 > 0) " " else ""
