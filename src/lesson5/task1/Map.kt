@@ -91,13 +91,13 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *   buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
-fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
+fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()/*{
     val grades2: MutableMap<Int, MutableList<String>> = mutableMapOf()
     for ((student, mark) in grades) {
         grades2[mark].add(student)
     }
     return grades2
-}
+}*/
 
 /**
  * Простая
