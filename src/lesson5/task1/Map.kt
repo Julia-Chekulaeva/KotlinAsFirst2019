@@ -92,9 +92,9 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
-    val grades2: MutableMap<Int, List<String>> = mutableMapOf()
+    val grades2: MutableMap<Int, MutableList<String>> = mutableMapOf()
     for ((student, mark) in grades) {
-        grades2[mark] += student
+        grades2[mark].add(student)
     }
     return grades2
 }
