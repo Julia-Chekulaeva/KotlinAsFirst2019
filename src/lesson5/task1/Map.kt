@@ -171,13 +171,15 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
     val res = mutableMapOf<String, String>()
-    for ((name, num) in mapA) {
-        if (mapB[name] != null) {
-            if (mapB[name] == num) res[name] = num
-            else res[name] = "$num, ${mapB[name]}"
-        }
+    for ((name, num) in mapA) res[name] = num
+    for ((name, num) in mapB) {
+        if (name in res && res[name] != num) res[name] += ", $num"
     }
     return res
+} // Неправильно
+
+fun main() {
+
 }
 
 /**
