@@ -176,7 +176,7 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
         if (name in res && res[name] != num) res[name] += ", $num"
     }
     return res
-} // Неправильно
+}
 
 fun main() {
 
