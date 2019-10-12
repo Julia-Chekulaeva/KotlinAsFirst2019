@@ -143,7 +143,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
  * В выходном списке не должно быть повторяюихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = {
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
     val res = mutableListOf<String>()
     for (element in a) {
         if (element in b && !(element in res))
@@ -170,7 +170,7 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = {
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
-    val res = mutableMap<String, String>()
+    val res = mutableMapOf<String, String>()
     for ((name, num) in mapA) {
         if (mapB[name] != null) {
             if (mapB[name] == num) res[name] = num
@@ -190,14 +190,18 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
-    val sum = mutableMap<String, Double>()
-    val count = mutableMap<String, Double>()
-    val res = mutableMap<String, Double>()
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO() /*{
+    val sum = mutableMapOf<String, Double>()
+    var s: Double
+    var c: Double
+    val count = mutableMapOf<String, Double>()
+    val res = mutableMapOf<String, Double>()
     for ((action, price) in stockPrices) {
         if (action in sum) {
-            sum[action] += price
-            count[action] += 1.0
+            s = sum[action]
+            c = count[action]
+            sum[action] = s + price
+            count[action] = c + 1.0
         }
         else {
             sum[action] = price
@@ -208,7 +212,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
         res[action] = sumprice / count[action]
     }
     return res
-}
+}*/
 
 /**
  * Средняя
