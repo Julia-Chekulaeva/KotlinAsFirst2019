@@ -143,7 +143,14 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
  * В выходном списке не должно быть повторяюихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = {
+    val res = mutableListOf<String>()
+    for (element in a) {
+        if (element in b && !(element in res))
+            res.add(element)
+    }
+    return res
+}
 
 /**
  * Средняя
@@ -162,7 +169,16 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
  *     mapOf("Emergency" to "911", "Police" to "02")
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
-fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> = TODO()
+fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
+    val res = mutableMap<String, String>()
+    for ((name, num) in mapA) {
+        if (mapB[name] != null) {
+            if (mapB[name] == num) res[name] = num
+            else res[name] = "$num, ${mapB[name]}"
+        }
+    }
+    return res
+}
 
 /**
  * Средняя
@@ -174,7 +190,25 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    val sum = mutableMap<String, Double>()
+    val count = mutableMap<String, Double>()
+    val res = mutableMap<String, Double>()
+    for ((action, price) in stockPrices) {
+        if (action in sum) {
+            sum[action] += price
+            count[action] += 1.0
+        }
+        else {
+            sum[action] = price
+            count[action] = 1.0
+        }
+    }
+    for ((action, sumprice) in sum) {
+        res[action] = sumprice / count[action]
+    }
+    return res
+}
 
 /**
  * Средняя
