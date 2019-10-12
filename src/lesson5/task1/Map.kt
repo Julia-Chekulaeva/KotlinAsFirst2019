@@ -173,7 +173,10 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
     val res = mutableMapOf<String, String>()
     for ((name, num) in mapA) res[name] = num
     for ((name, num) in mapB) {
-        if (name in res && res[name] != num) res[name] += ", $num"
+        if (name in res) {
+            if (res[name] != num) res[name] += ", $num"
+        }
+        else res[name] = num
     }
     return res
 }
@@ -188,7 +191,7 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO() /*{
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO() /* {
     val sum = mutableMapOf<String, Double>()
     var s: Double
     var c: Double
