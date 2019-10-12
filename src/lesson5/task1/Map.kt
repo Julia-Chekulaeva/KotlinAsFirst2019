@@ -178,10 +178,6 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
     return res
 }
 
-fun main() {
-
-}
-
 /**
  * Средняя
  *
