@@ -272,7 +272,7 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
     for ((letter, count) in res) {
         if (count == 1) res.remove(letter)
     }
-    return res
+    return res ?: mapOf()
 }
 
 /**
@@ -284,7 +284,16 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  * Например:
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
-fun hasAnagrams(words: List<String>): Boolean = TODO()
+fun hasAnagrams(words: List<String>): Boolean {
+    val countLetters = mutableSetOf<Map<Char, Int>>()
+    val c = mutableMapOf<Char, Int>()
+    for (word in words) {
+        c.clear()
+        for (i in 0 until word.length) c[word[i]] = (c[word[i]] ?: 0) + 1
+        countLetters.add(c)
+    }
+    return countLetters.size != words.size
+}
 
 /**
  * Сложная
