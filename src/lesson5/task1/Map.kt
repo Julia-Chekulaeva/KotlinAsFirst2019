@@ -319,7 +319,7 @@ fun hasAnagrams(words: List<String>): Boolean {
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
  */
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
+fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO() /*{
     val res = friends.toMutableMap()
     for ((name, friendsName) in res) {
         for ((name2, friendsName2) in res) {
@@ -327,7 +327,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
         }
     }
     return res
-} // Неправильно, причем неправильно решение по сути... Чтооооо это такое....
+} // Неправильно, причем неправильно решение по сути... Чтооооо это такое.... */
 
 /**
  * Сложная
