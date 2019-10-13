@@ -272,7 +272,7 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
     for ((letter, count) in res) {
         if (count == 1) res.remove(letter)
     }
-    return res ?: mapOf<String, Int>()
+    return if (res == null) mapOf<String, Int>() else res
 }
 
 /**
@@ -327,7 +327,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
         }
     }
     return res
-}
+} // Неправильно, причем неправильно решение по сути... Чтооооо это такое....
 
 /**
  * Сложная
