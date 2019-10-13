@@ -272,7 +272,7 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
     for ((letter, count) in res) {
         if (count == 1) res.remove(letter)
     }
-    return (res ?: mapOf())
+    return res ?: mapOf<String, Int>()
 }
 
 /**
@@ -319,7 +319,15 @@ fun hasAnagrams(words: List<String>): Boolean {
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
  */
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO()
+fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
+    val res = friends.toMutableMap()
+    for ((name, friendsName) in res) {
+        for ((name2, friendsName2) in res) {
+            if (name in friendsName2) res[name] = friendsName + name2
+        }
+    }
+    return res
+}
 
 /**
  * Сложная
