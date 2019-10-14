@@ -266,14 +266,14 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> {
+fun extractRepeats(list: List<String>): Map<String, Int> = TODO() /*{
     val res = mutableMapOf<String, Int>()
     for (i in 0 until list.size) res[list[i]] = (res[list[i]] ?: 0) + 1
     for ((letter, count) in res) {
         if (count == 1) res.remove(letter)
     }
     return if (res == null) mapOf<String, Int>() else res
-}
+}*/
 
 /**
  * Средняя
@@ -327,7 +327,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
         }
     }
     return res
-} // Неправильно, причем неправильно решение по сути... Чтооооо это такое.... */
+} // Неправильно, причем неправильно решение по сути... Чтооооо это такое.... */ // Аааааааааа
 
 /**
  * Сложная
@@ -346,15 +346,21 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+/*fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     for (i in 0 until list.size - 1) {
         for (j in i + 1 until list.size) {
             if (list[i] + list[j] == number) return Pair(i, j)
         }
     }
     return Pair(-1, -1)
-}
+}*/
 
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    for (i in 0 until list.size - 1) {
+        if (list.contains(number - list[i])) return Pair(i, j)
+    }
+    return Pair(-1, -1)
+}
 /**
  * Очень сложная
  *
