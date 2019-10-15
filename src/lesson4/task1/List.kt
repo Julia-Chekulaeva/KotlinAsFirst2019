@@ -116,8 +116,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * Модуль пустого вектора считать равным 0.0.
  */
 fun abs(v: List<Double>): Double {
-    val s = v.fold(0.0) {
-            previous, element ->
+    val s = v.fold(0.0) { previous, element ->
         previous + element * element
     }
     return sqrt(s)
@@ -173,7 +172,7 @@ fun times(a: List<Int>, b: List<Int>): Int {
 fun polynom(p: List<Int>, x: Int): Int {
     var xN = 1
     var result = 0
-    for (i in 0..p.size - 1) {
+    for (i in 0..p.lastIndex) {
         result += p[i] * xN
         xN *= x
     }
@@ -191,10 +190,10 @@ fun polynom(p: List<Int>, x: Int): Int {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
-    var sum = 0
-    for (i in 0..list.size - 1) {
-        sum += list[i]
-        list[i] += sum - list[i]
+    for (i in 0..list.lastIndex) {
+        for (j in 0 until i) {
+            list[i] += list[j]
+        }
     }
     return list
 }
@@ -208,18 +207,14 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
  */
 fun factorize(n: Int): List<Int> {
     var num = n
-    var i: Int
-    val multiplier: MutableList<Int> = mutableListOf()
+    var i = 2
+    val multiplier = mutableListOf<Int>()
     while (num > 1) {
-        i = 2
-        while (i <= num) {
-            if (num % i == 0) {
-                multiplier.add(i)
-                num /= i
-                i = num
-            }
-            i += 1
+        while (num % i == 0) {
+            multiplier.add(i)
+            num /= i
         }
+        i += 1
     }
     return multiplier
 }
@@ -243,14 +238,12 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*
 fun convert(n: Int, base: Int): List<Int> {
     if (n == 0) return listOf(0)
     var num = n
-    val numberInDigits: MutableList<Int> = mutableListOf()
+    val numberInDigits = mutableListOf<Int>()
     while (num > 0) {
         numberInDigits.add(0, num % base)
         num /= base
     }
-    val result: List<Int>
-    result = numberInDigits
-    return result
+    return numberInDigits
 }
 
 /**
@@ -336,45 +329,8 @@ fun decimalFromString(str: String, base: Int): Int {
     var result = 0
     var multiplier = 1
     for (i in 0 until str.length) {
-        result += multiplier * when (str[str.length - 1 - i]) {
-            '0' -> 0
-            '1' -> 1
-            '2' -> 2
-            '3' -> 3
-            '4' -> 4
-            '5' -> 5
-            '6' -> 6
-            '7' -> 7
-            '8' -> 8
-            '9' -> 9
-            'a' -> 10
-            'b' -> 11
-            'c' -> 12
-            'd' -> 13
-            'e' -> 14
-            'f' -> 15
-            'g' -> 16
-            'h' -> 17
-            'i' -> 18
-            'j' -> 19
-            'k' -> 20
-            'l' -> 21
-            'm' -> 22
-            'n' -> 23
-            'o' -> 24
-            'p' -> 25
-            'q' -> 26
-            'r' -> 27
-            's' -> 28
-            't' -> 29
-            'u' -> 30
-            'v' -> 31
-            'w' -> 32
-            'x' -> 33
-            'y' -> 34
-            'z' -> 35
-            else -> 1
-        }
+        result += multiplier * if (str[str.length - 1 - i].toInt() < 10) str[str.length - 1 - i].toInt()
+        else str[str.length - 1 - i].toInt() - 'a'.toInt() + 10
         multiplier *= base
     }
     return result
@@ -391,9 +347,9 @@ fun decimalFromString(str: String, base: Int): Int {
 fun roman(n: Int): String {
     var num = n
     var res = ""
-    val listStr: List<String> = listOf("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
-    val listNum: List<Int> = listOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
-    for (i in 0..12) {
+    val listStr = listOf("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+    val listNum = listOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+    for (i in listNum.indices) {
         while (num >= listNum[i]) {
             res += listStr[i]
             num -= listNum[i]
@@ -411,13 +367,13 @@ fun roman(n: Int): String {
  */
 fun russian(n: Int): String  {
     var res = ""
-    val listStr1to9Thousands: List<String> = listOf("", "одна ", "две ", "три ", "четыре ", "пять ", "шесть ", "семь ", "восемь ", "девять ")
-    val listStr1to9Units: List<String> = listOf("", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
-    val listStr10to19: List<String> = listOf("десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать",
+    val listStr1to9Thousands = listOf("", "одна ", "две ", "три ", "четыре ", "пять ", "шесть ", "семь ", "восемь ", "девять ")
+    val listStr1to9Units = listOf("", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+    val listStr10to19 = listOf("десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать",
         "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
-    val listStrDec: List<String> = listOf("", "", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят",
+    val listStrDec = listOf("", "", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят",
         "восемьдесят", "девяносто")
-    val listStrHundreds: List<String> = listOf("", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот",
+    val listStrHundreds = listOf("", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот",
         "восемьсот", "девятьсот")
     val thousands = n / 1000
     val units = n % 1000

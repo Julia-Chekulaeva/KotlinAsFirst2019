@@ -193,8 +193,6 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
     val sum = mutableMapOf<String, Double>()
-    var s: Double
-    var c: Double
     val count = mutableMapOf<String, Double>()
     val res = mutableMapOf<String, Double>()
     for ((action, price) in stockPrices) {
@@ -327,7 +325,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
         }
     }
     return res
-} // Неправильно, причем неправильно решение по сути... Чтооооо это такое.... */ // Аааааааааа
+} */
 
 /**
  * Сложная
@@ -346,21 +344,21 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-/*fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     for (i in 0 until list.size - 1) {
         for (j in i + 1 until list.size) {
             if (list[i] + list[j] == number) return Pair(i, j)
         }
     }
     return Pair(-1, -1)
-}*/
-
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+}
+/*fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     for (i in 0 until list.size - 1) {
         if (list.contains(number - list[i])) return Pair(i, j)
     }
     return Pair(-1, -1)
-}
+}*/
+
 /**
  * Очень сложная
  *

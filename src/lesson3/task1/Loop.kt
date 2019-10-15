@@ -88,7 +88,7 @@ fun digitNumber(n: Int): Int {
 fun fib(n: Int): Int {
     var f1 = 1
     var f2 = 1
-    var x = 0
+    var x: Int
     for (i in 3..n) {
         x = f2
         f2 = f1 + f2
@@ -182,8 +182,7 @@ fun collatzSteps(x: Int): Int {
     var i = 0
     while (x1 > 1) {
         i += 1
-        if (x1 % 2 == 0) x1 = x1 / 2
-        else x1 = x1 * 3 + 1
+        x1 = if (x1 % 2 == 0) x1 / 2 else x1 * 3 + 1
     }
     return i
 }
@@ -319,14 +318,14 @@ fun squareSequenceDigit(n: Int): Int {
  */
 fun fibSequenceDigit(n: Int): Int {
     var length = 0 // Та же длина строки, но теперь прямо до нужного числа
-    var i = 0 // Та же длина числа
+    var i: Int // Та же длина числа
     var ind = 0 // Номер числа
-    var num = 0 // Рассматриваемое число Фибоначчи
+    var num: Int // Рассматриваемое число Фибоначчи
     while (length < n) {
         i = 0
         ind += 1
         num = fib(ind)
-        while (num > 0){
+        while (num > 0) {
             i += 1
             num /= 10
         }
