@@ -92,9 +92,9 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
-    val grades2: MutableMap<Int, List<String>> = mutableMapOf()
+    val grades2 = mutableMapOf<Int, MutableList<String>>()
     for ((student, mark) in grades) {
-        grades2[mark] = (grades2[mark] ?: listOf()) + student
+        (grades2[mark] ?: mutableListOf<String>()).add(student)
     }
     return grades2
 }
@@ -143,14 +143,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
  * В выходном списке не должно быть повторяюихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
-    val res = mutableListOf<String>()
-    for (element in a) {
-        if (element in b && !(element in res))
-            res.add(element)
-    }
-    return res
-}
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = (a.toSet().intersect(b.toSet())).toList()
 
 /**
  * Средняя
@@ -170,7 +163,7 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
-    val res = mutableMapOf<String, String>()
+    val res = mapA.toMutableMap()
     for ((name, num) in mapA) res[name] = num
     for ((name, num) in mapB) {
         if (name in res) {
@@ -221,13 +214,11 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
 // Я не поняла, как без изменения возвращаемого типа можно вернуть null
-    var minCost = 0.0
+    var minCost = Double.POSITIVE_INFINITY
     var res: String? = null
-    var first = true
     for ((name, pair) in stuff) {
-        if (pair.first == kind && (first || pair.second < minCost)) {
+        if (pair.first == kind && pair.second <= minCost) {
             minCost = pair.second
-            first = false
             res = name
         }
     }
@@ -244,12 +235,10 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    val w = word.toLowerCase()
     val c = chars.map { it.toLowerCase() }
-    for (i in 0..word.length - 1) {
-        if (!(w[i] in c)) return false
-    }
-    return true
+    val w = word.toLowerCase().toList().toSet() - c
+    if (w.isEmpty()) return true
+    return false
 }
 
 /**
@@ -264,14 +253,12 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> = TODO() /*{
+fun extractRepeats(list: List<String>): Map<String, Int> {
     val res = mutableMapOf<String, Int>()
     for (i in 0 until list.size) res[list[i]] = (res[list[i]] ?: 0) + 1
-    for ((letter, count) in res) {
-        if (count == 1) res.remove(letter)
-    }
-    return if (res == null) mapOf<String, Int>() else res
-}*/
+    res.filter { it.value != 1 }.toMap()
+    return res
+}
 
 /**
  * Средняя
@@ -317,15 +304,26 @@ fun hasAnagrams(words: List<String>): Boolean {
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
  */
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO() /*{
-    val res = friends.toMutableMap()
-    for ((name, friendsName) in res) {
-        for ((name2, friendsName2) in res) {
-            if (name in friendsName2) res[name] = friendsName + name2
+
+fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
+    val res: MutableMap<String, Set<String>> = friends.toMutableMap()
+    var size: Int
+    val finalFriends = mutableSetOf<String>()
+    for (name in friends) {
+        finalFriends.addAll(res[name.key]!!)
+        size = 0
+        while (finalFriends.size != size) {
+            size = finalFriends.size
+            for (name2 in res[name.key]!!) {
+                finalFriends.addAll(friends[name2]!!)
+            }
+            finalFriends.remove(name.key)
         }
+        res[name.key] = finalFriends
+        finalFriends.clear()
     }
     return res
-} */
+}
 
 /**
  * Сложная

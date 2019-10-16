@@ -190,10 +190,8 @@ fun polynom(p: List<Int>, x: Int): Int {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
-    for (i in 0..list.lastIndex) {
-        for (j in 0 until i) {
-            list[i] += list[j]
-        }
+    for (i in 1..list.lastIndex) {
+        list[i] += list[i - 1]
     }
     return list
 }
@@ -262,36 +260,7 @@ fun convertToString(n: Int, base: Int): String {
     val listConv = convert(n, base)
     for (i in 0 until listConv.size) {
         num += if (listConv[i] < 10) "${listConv[i]}"
-        else when (listConv[i]) {
-            10 -> "a"
-            11 -> "b"
-            12 -> "c"
-            13 -> "d"
-            14 -> "e"
-            15 -> "f"
-            16 -> "g"
-            17 -> "h"
-            18 -> "i"
-            19 -> "j"
-            20 -> "k"
-            21 -> "l"
-            22 -> "m"
-            23 -> "n"
-            24 -> "o"
-            25 -> "p"
-            26 -> "q"
-            27 -> "r"
-            28 -> "s"
-            29 -> "t"
-            30 -> "u"
-            31 -> "v"
-            32 -> "w"
-            33 -> "x"
-            34 -> "y"
-            35 -> "z"
-            36 -> "" // Я пока не понимаю, как можно записать эту цифру, на нее не хватает букв
-            else -> ""
-        }
+        else ('a' + listConv[i] - 10).toString()
     }
     return num
 }
@@ -329,7 +298,7 @@ fun decimalFromString(str: String, base: Int): Int {
     var result = 0
     var multiplier = 1
     for (i in 0 until str.length) {
-        result += multiplier * if (str[str.length - 1 - i].toInt() < 10) str[str.length - 1 - i].toInt()
+        result += multiplier * if (str[str.length - 1 - i].toInt() < '0'.toInt() + 10) str[str.length - 1 - i].toInt() - '0'.toInt()
         else str[str.length - 1 - i].toInt() - 'a'.toInt() + 10
         multiplier *= base
     }
