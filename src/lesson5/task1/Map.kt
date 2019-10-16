@@ -94,7 +94,8 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val grades2 = mutableMapOf<Int, MutableList<String>>()
     for ((student, mark) in grades) {
-        (grades2[mark] ?: mutableListOf<String>()).add(student)
+        if (grades2[mark] == null) grades2[mark] = mutableListOf()
+        (grades2[mark]!!).add(student)
     }
     return grades2
 }
@@ -256,8 +257,7 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
 fun extractRepeats(list: List<String>): Map<String, Int> {
     val res = mutableMapOf<String, Int>()
     for (i in 0 until list.size) res[list[i]] = (res[list[i]] ?: 0) + 1
-    res.filter { it.value != 1 }.toMap()
-    return res
+    return res.filter { it.value != 1 }.toMap()
 }
 
 /**
@@ -305,25 +305,29 @@ fun hasAnagrams(words: List<String>): Boolean {
  *        )
  */
 
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
+fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO() /*{
     val res: MutableMap<String, Set<String>> = friends.toMutableMap()
-    var size: Int
+    val friendsToAdd = mutableSetOf<String>()
+    val friendsForLoop = mutableSetOf<String>()
     val finalFriends = mutableSetOf<String>()
     for (name in friends) {
         finalFriends.addAll(res[name.key]!!)
-        size = 0
-        while (finalFriends.size != size) {
-            size = finalFriends.size
-            for (name2 in res[name.key]!!) {
-                finalFriends.addAll(friends[name2]!!)
+        friendsForLoop.addAll(friends[name.key]!!)
+        while (friendsForLoop.isNotEmpty()) {
+            friendsForLoop.removeAll(friendsToAdd)
+            for (name2 in friendsForLoop) {
+                friendsToAdd.addAll(friends[name2]!!)
             }
-            finalFriends.remove(name.key)
+            friendsToAdd.remove(name.key)
+            friendsForLoop.addAll(friendsToAdd)
+            finalFriends.addAll(friendsToAdd)
+
         }
-        res[name.key] = finalFriends
-        finalFriends.clear()
+        res[name.key] = friends[name.key].union(friendsToAdd)
+        friendsToAdd.clear()
     }
     return res
-}
+}*/
 
 /**
  * Сложная
@@ -351,6 +355,14 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     return Pair(-1, -1)
 }
 /*fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    var s: List<Int>
+    for (i in 0 until list.size) {
+        s = list.subList(0, i) + list.subList(i + 1, list.size)
+        if (s.contains(number - list[i]))
+    }
+    return Pair(-1, -1)
+}
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     for (i in 0 until list.size - 1) {
         if (list.contains(number - list[i])) return Pair(i, j)
     }
