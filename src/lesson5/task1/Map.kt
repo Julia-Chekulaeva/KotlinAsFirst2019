@@ -165,7 +165,6 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = (a.toSet().in
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
     val res = mapA.toMutableMap()
-    for ((name, num) in mapA) res[name] = num
     for ((name, num) in mapB) {
         if (name in res) {
             if (res[name] != num) res[name] += ", $num"
@@ -214,7 +213,6 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *   ) -> "Мария"
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
-// Я не поняла, как без изменения возвращаемого типа можно вернуть null
     var minCost = Double.POSITIVE_INFINITY
     var res: String? = null
     for ((name, pair) in stuff) {
@@ -237,9 +235,8 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     val c = chars.map { it.toLowerCase() }
-    val w = word.toLowerCase().toList().toSet() - c
-    if (w.isEmpty()) return true
-    return false
+    val w = word.toLowerCase().toSet() - c
+    return w.isEmpty()
 }
 
 /**
@@ -311,20 +308,19 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
     val friendsForLoop = mutableSetOf<String>()
     val finalFriends = mutableSetOf<String>()
     for (name in friends) {
-        finalFriends.addAll(res[name.key]!!)
+        finalFriends.addAll(friends[name.key]!!)
         friendsForLoop.addAll(friends[name.key]!!)
         while (friendsForLoop.isNotEmpty()) {
-            friendsForLoop.removeAll(friendsToAdd)
             for (name2 in friendsForLoop) {
                 friendsToAdd.addAll(friends[name2]!!)
             }
             friendsToAdd.remove(name.key)
             friendsForLoop.addAll(friendsToAdd)
+            friendsForLoop.removeAll(finalFriends)
             finalFriends.addAll(friendsToAdd)
-
+            friendsToAdd.clear()
         }
-        res[name.key] = friends[name.key].union(friendsToAdd)
-        friendsToAdd.clear()
+        res[name.key] = finalFriends
     }
     return res
 }*/

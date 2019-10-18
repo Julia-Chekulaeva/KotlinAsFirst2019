@@ -298,7 +298,7 @@ fun decimalFromString(str: String, base: Int): Int {
     var result = 0
     var multiplier = 1
     for (i in 0 until str.length) {
-        result += multiplier * if (str[str.length - 1 - i].toInt() < '0'.toInt() + 10) str[str.length - 1 - i].toInt() - '0'.toInt()
+        result += multiplier * if (str[str.length - 1 - i] < '0' + 10) str[str.length - 1 - i] - '0'
         else str[str.length - 1 - i].toInt() - 'a'.toInt() + 10
         multiplier *= base
     }
