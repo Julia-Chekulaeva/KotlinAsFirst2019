@@ -379,6 +379,7 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
 fun maxSum(list: List<Pair<Int, Int>>, c: Int, listOfInd: MutableList<Int>): Int {
     val s = listOfInd
     if (list.isNotEmpty()) {
+        if (list[list.size - 1].first > c) return maxSum(list - list[list.size - 1], c, listOfInd)
         val m = maxSum(list - list[list.size - 1], c, s)
         val m2 = maxSum(list - list[list.size - 1], c - list[list.size - 1].first, s)
         if (m2 + list[list.size].second > m) {
