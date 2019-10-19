@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import kotlin.math.max
+
 /**
  * Пример
  *
@@ -168,8 +170,7 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
     for ((name, num) in mapB) {
         if (name in res) {
             if (res[name] != num) res[name] += ", $num"
-        }
-        else res[name] = num
+        } else res[name] = num
     }
     return res
 }
@@ -302,7 +303,7 @@ fun hasAnagrams(words: List<String>): Boolean {
  *        )
  */
 
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO() /*{
+fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
     val res: MutableMap<String, Set<String>> = friends.toMutableMap()
     val friendsToAdd = mutableSetOf<String>()
     val friendsForLoop = mutableSetOf<String>()
@@ -323,7 +324,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
         res[name.key] = finalFriends
     }
     return res
-}*/
+}
 
 /**
  * Сложная
@@ -374,4 +375,30 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+
+fun maxSum(list: List<Pair<Int, Int>>, c: Int, listOfInd: MutableList<Int>): Int {
+    val s = listOfInd
+    val m = maxSum(list - list[list.size - 1], c, s)
+    val m2 = maxSum(list - list[list.size - 1], c - list[list.size - 1].first, s)
+    if (m2 + list[list.size].second > m) {
+        listOfInd.add(list.size - 1)
+        return maxSum(list - list[list.size - 1], c - list[list.size - 1].first, listOfInd)
+    }
+    else return maxSum(list - list[list.size - 1], c, listOfInd)
+}
+
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    val s = mutableListOf<Pair<Int, Int>>()
+    val ind = mutableListOf<Int>()
+    val names = mutableListOf<String>()
+    val res = mutableSetOf<String>()
+    for (element in treasures) {
+        s.add(element.value)
+        names.add(element.key)
+    }
+    val h = maxSum(s.toList(), capacity, ind)
+    for (i in ind) {
+        res.add(names[i])
+    }
+    return res
+}
