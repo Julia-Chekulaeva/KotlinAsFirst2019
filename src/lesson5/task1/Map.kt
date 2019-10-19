@@ -378,13 +378,16 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
 
 fun maxSum(list: List<Pair<Int, Int>>, c: Int, listOfInd: MutableList<Int>): Int {
     val s = listOfInd
-    val m = maxSum(list - list[list.size - 1], c, s)
-    val m2 = maxSum(list - list[list.size - 1], c - list[list.size - 1].first, s)
-    if (m2 + list[list.size].second > m) {
-        listOfInd.add(list.size - 1)
-        return maxSum(list - list[list.size - 1], c - list[list.size - 1].first, listOfInd)
+    if (list.isNotEmpty()) {
+        val m = maxSum(list - list[list.size - 1], c, s)
+        val m2 = maxSum(list - list[list.size - 1], c - list[list.size - 1].first, s)
+        if (m2 + list[list.size].second > m) {
+            listOfInd.add(list.size - 1)
+            return maxSum(list - list[list.size - 1], c - list[list.size - 1].first, listOfInd)
+        }
+        return maxSum(list - list[list.size - 1], c, listOfInd)
     }
-    else return maxSum(list - list[list.size - 1], c, listOfInd)
+    return 0
 }
 
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
