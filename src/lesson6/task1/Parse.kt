@@ -69,7 +69,31 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+val months = listOf(
+    "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября",
+    "октября", "ноября", "декабря"
+)
+
+fun dateStrToDigit(str: String): String {
+    val parts = str.split(" ")
+    val Num: Int
+    var Month = 0
+    val Year: Int
+    if (parts.size == 3) {
+        try {
+            Num = parts[0].toInt()
+            Year = parts[2].toInt()
+            for (i in 0..11) {
+                if (parts[1] == months[i]) Month = i + 1
+            }
+            if (Num in 1..lesson2.task2.daysInMonth(Month, Year))
+                return String.format("%02d.%02d.%d", Num, Month, Year)
+        } catch (e: NumberFormatException) {
+            return ""
+        }
+    }
+    return ""
+}
 
 /**
  * Средняя
@@ -81,7 +105,24 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val parts = digital.split(".")
+    val Num: Int
+    val Month: Int
+    val Year: Int
+    if (parts.size == 3) {
+        try {
+            Num = parts[0].toInt()
+            Month = parts[1].toInt()
+            Year = parts[2].toInt()
+            if (Num in 1..lesson2.task2.daysInMonth(Month, Year))
+                return String.format("$Num ${months[Month - 1]} $Year")
+        } catch (e: NumberFormatException) {
+            return ""
+        }
+    }
+    return ""
+}
 
 /**
  * Средняя
@@ -97,7 +138,40 @@ fun dateDigitToStr(digital: String): String = TODO()
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+
+fun flattenPhoneNumber(phone: String): String {
+    var s = phone.filter { it != ' ' && it != '-' }
+    val numStr: String
+    val Plus: String
+    val i1: Int
+    val i2: Int
+    if (s[0] == '+') {
+        Plus = "+"
+        s = s.substring(1)
+    }
+    else Plus = ""
+    var i = 0
+    while (s[i] != '(' && i < s.length - 3) i += 1
+    i1 = i
+    if (s[i] == '(') i += 2
+    while (s[i] != ')' && i < s.length - 1) i += 1
+    if (s[i] == ')') i2 = i
+    else i2 = i1
+    numStr = if (i1 != i2) s.substring(0, i1) + s.substring(i1 + 1, i2) + s.substring(i2 + 1)
+    else s
+    for (i in 0 until numStr.length) {
+        if (numStr[i] < '0' || numStr[i] > '9') {
+            return ""
+        }
+    }
+    /*try {
+        num = numStr.toInt()
+    }
+    catch (e: NumberFormatException) {
+        return ""
+    }*/
+    return Plus + numStr
+}
 
 /**
  * Средняя

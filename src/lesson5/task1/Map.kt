@@ -273,7 +273,7 @@ fun hasAnagrams(words: List<String>): Boolean {
     for (word in words) {
         c.clear()
         for (i in 0 until word.length) c[word[i]] = (c[word[i]] ?: 0) + 1
-        countLetters.add(c)
+        countLetters.add(c.toMap())
     }
     return countLetters.size != words.size
 }
@@ -309,8 +309,8 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
     val friendsForLoop = mutableSetOf<String>()
     val finalFriends = mutableSetOf<String>()
     for (name in friends) {
-        finalFriends.addAll(friends[name.key]!!)
-        friendsForLoop.addAll(friends[name.key]!!)
+        finalFriends.addAll(name.value)
+        friendsForLoop.addAll(name.value)
         while (friendsForLoop.isNotEmpty()) {
             for (name2 in friendsForLoop) {
                 friendsToAdd.addAll(friends[name2]!!)
@@ -323,7 +323,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
         }
         res[name.key] = finalFriends
     }
-    return res
+    return res.toMap()
 }
 
 /**
