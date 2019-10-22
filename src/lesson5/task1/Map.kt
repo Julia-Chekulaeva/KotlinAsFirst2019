@@ -321,30 +321,13 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
             friendsForLoop.removeAll(finalFriends)
             finalFriends.addAll(friendsToAdd)
             friendsToAdd.clear()
-            //print("$finalFriends $key    ")
         }
         finalFriends.remove(key)
-        //print("$finalFriends     ")
         res[key] = finalFriends.toSet()
-        //print("${res[key]}     ")
         finalFriends.clear()
-        //print("$key ${res[key]}   ")
     }
-    //print("$res     ")
     for (name in namesToAdd) res[name] = setOf()
     return res.toMap()
-}
-
-fun main() {
-    print(
-        propagateHandshakes(
-            mapOf(
-                "Marat" to setOf("Mikhail", "Sveta"),
-                "Sveta" to setOf("Mikhail"),
-                "Mikhail" to setOf()
-            )
-        )
-    )
 }
 
 /**
@@ -396,33 +379,41 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
+val listOfInd = mutableListOf<Int>()
 
-fun maxSum(list: List<Pair<Int, Int>>, c: Int, listOfInd: MutableList<Int>): Int {
+fun maxSum(list: List<Pair<Int, Int>>, c: Int, a: Boolean): Int {
     if (list.isNotEmpty()) {
-        if (list[list.size - 1].first > c) return maxSum(list - list[list.size - 1], c, listOfInd)
-        val m = maxSum(list - list[list.size - 1], c, listOfInd)
-        val m2 = maxSum(list - list[list.size - 1], c - list[list.size - 1].first, listOfInd)
-        if (m2 + list[list.lastIndex].second > m) {
-            listOfInd.add(list.size - 1)
-            return maxSum(list - list[list.size - 1], c - list[list.size - 1].first, listOfInd)
+        if (list.last().first > c) {
+            //print("$c out${list - list.last()} $listOfInd   ")
+            return maxSum(list - list.last(), c, a)
         }
-        return maxSum(list - list[list.size - 1], c, listOfInd)
+        val m = maxSum(list - list.last(), c, false)
+        val m2 = maxSum(list - list.last(), c - list.last().first, false)
+        if (m2 + list[list.lastIndex].second > m) {
+            if (a) listOfInd.add(list.lastIndex)
+            //print("$c L${list - list.last()} $listOfInd   ")
+            return maxSum(list - list.last(), c - list.last().first, a)
+        }
+        //print("$c l${list - list.last()} $listOfInd   ")
+        return maxSum(list - list.last(), c, a)
     }
     return 0
 }
 
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
     val s = mutableListOf<Pair<Int, Int>>()
-    val ind = mutableListOf<Int>()
     val names = mutableListOf<String>()
     val res = mutableSetOf<String>()
-    for (element in treasures) {
-        s.add(element.value)
-        names.add(element.key)
+    for ((key, value) in treasures) {
+        s.add(value)
+        names.add(key)
     }
-    val h = maxSum(s.toList(), capacity, ind)
-    for (i in ind) {
+    val h = maxSum(s.toList(), capacity, true)
+    for (i in listOfInd) {
         res.add(names[i])
     }
     return res
+}
+fun main() {
+    print("${bagPacking(mapOf("Кубок" to (500 to 2000), "Слиток" to (1000 to 5000)), 450)}")
 }
