@@ -160,7 +160,7 @@ fun flattenPhoneNumber(phone: String): String {
     else i2 = i1
     if (i1 != i2) s = s.substring(0, i1) + s.substring(i1 + 1, i2) + s.substring(i2 + 1)
     for (i in 0 until s.length) {
-        if (s[i] < '0' || s[i] > '9') {
+        if (s[i] !in '0'..'9') {
             return ""
         }
     }

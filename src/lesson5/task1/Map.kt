@@ -307,23 +307,44 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
     val res: MutableMap<String, Set<String>> = friends.toMutableMap()
     val friendsToAdd = mutableSetOf<String>()
     val friendsForLoop = mutableSetOf<String>()
+    val namesToAdd = mutableListOf<String>()
     val finalFriends = mutableSetOf<String>()
-    for (name in friends) {
-        finalFriends.addAll(name.value)
-        friendsForLoop.addAll(name.value)
+    for ((key, value) in friends) {
+        finalFriends.addAll(value)
+        friendsForLoop.addAll(value)
         while (friendsForLoop.isNotEmpty()) {
             for (name2 in friendsForLoop) {
-                friendsToAdd.addAll(friends[name2]!!)
+                friendsToAdd.addAll(friends[name2] ?: mutableSetOf())
+                if (!friends.containsKey(name2) && !namesToAdd.contains(name2)) namesToAdd.add(name2)
             }
-            friendsToAdd.remove(name.key)
             friendsForLoop.addAll(friendsToAdd)
             friendsForLoop.removeAll(finalFriends)
             finalFriends.addAll(friendsToAdd)
             friendsToAdd.clear()
+            //print("$finalFriends $key    ")
         }
-        res[name.key] = finalFriends
+        finalFriends.remove(key)
+        //print("$finalFriends     ")
+        res[key] = finalFriends.toSet()
+        //print("${res[key]}     ")
+        finalFriends.clear()
+        //print("$key ${res[key]}   ")
     }
+    //print("$res     ")
+    for (name in namesToAdd) res[name] = setOf()
     return res.toMap()
+}
+
+fun main() {
+    print(
+        propagateHandshakes(
+            mapOf(
+                "Marat" to setOf("Mikhail", "Sveta"),
+                "Sveta" to setOf("Mikhail"),
+                "Mikhail" to setOf()
+            )
+        )
+    )
 }
 
 /**
@@ -377,12 +398,11 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  */
 
 fun maxSum(list: List<Pair<Int, Int>>, c: Int, listOfInd: MutableList<Int>): Int {
-    val s = listOfInd
     if (list.isNotEmpty()) {
         if (list[list.size - 1].first > c) return maxSum(list - list[list.size - 1], c, listOfInd)
-        val m = maxSum(list - list[list.size - 1], c, s)
-        val m2 = maxSum(list - list[list.size - 1], c - list[list.size - 1].first, s)
-        if (m2 + list[list.size].second > m) {
+        val m = maxSum(list - list[list.size - 1], c, listOfInd)
+        val m2 = maxSum(list - list[list.size - 1], c - list[list.size - 1].first, listOfInd)
+        if (m2 + list[list.lastIndex].second > m) {
             listOfInd.add(list.size - 1)
             return maxSum(list - list[list.size - 1], c - list[list.size - 1].first, listOfInd)
         }
