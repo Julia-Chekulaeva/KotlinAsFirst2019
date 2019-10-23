@@ -412,6 +412,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     for (i in listOfInd) {
         res.add(names[i])
     }
+    listOfInd.clear()
     return res
 }
 fun main() {
