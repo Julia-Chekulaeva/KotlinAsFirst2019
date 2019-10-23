@@ -142,7 +142,6 @@ fun dateDigitToStr(digital: String): String {
 fun flattenPhoneNumber(phone: String): String {
     var s = phone.filter { it != ' ' && it != '-' }
     if (s == "") return s
-    val numStr: String
     val Plus: String
     val i1: Int
     val i2: Int
@@ -151,6 +150,7 @@ fun flattenPhoneNumber(phone: String): String {
         s = s.substring(1)
     }
     else Plus = ""
+    if (s.isEmpty()) return ""
     var i = 0
     while (s[i] != '(' && i < s.length - 3) i += 1
     i1 = i
@@ -159,6 +159,7 @@ fun flattenPhoneNumber(phone: String): String {
     if (s[i] == ')') i2 = i
     else i2 = i1
     if (i1 != i2) s = s.substring(0, i1) + s.substring(i1 + 1, i2) + s.substring(i2 + 1)
+    if (s.isEmpty()) return ""
     for (i in 0 until s.length) {
         if (s[i] !in '0'..'9') {
             return ""

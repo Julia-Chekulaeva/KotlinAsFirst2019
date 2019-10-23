@@ -401,6 +401,7 @@ fun maxSum(list: List<Pair<Int, Int>>, c: Int, a: Boolean): Int {
 }
 
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    if (treasures.isEmpty()) return setOf<String>()
     val s = mutableListOf<Pair<Int, Int>>()
     val names = mutableListOf<String>()
     val res = mutableSetOf<String>()
@@ -415,6 +416,6 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     listOfInd.clear()
     return res
 }
-fun main() {
-    print("${bagPacking(mapOf("Кубок" to (500 to 2000), "Слиток" to (1000 to 5000)), 450)}")
-}
+/*fun main() {
+    print("${bagPacking(mapOf(), 2)}")
+}*/
