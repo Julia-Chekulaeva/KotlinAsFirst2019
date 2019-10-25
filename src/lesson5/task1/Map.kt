@@ -411,14 +411,14 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
         names.add(key)
     }
     val h = maxSum(s.toList(), capacity, true)
-    for (i in listOfInd) {
-        res.add(names[i])
+    for (i in 0 until listOfInd.size) {
+        res.add(names[listOfInd[i]])
     }
     //print("$h ")
     listOfInd.clear()
     return res
 }
 
-/*fun main() {
-    print("${bagPacking(mapOf("0" to (1 to 2), "1" to (2 to 1)), 2)}")
-}*/
+fun main() {
+    print("${bagPacking(mapOf("0" to (1 to 1)), 1)}")
+}
