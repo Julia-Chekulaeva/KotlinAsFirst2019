@@ -381,23 +381,26 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  */
 val listOfInd = mutableListOf<Int>()
 
-fun maxSum(list: List<Pair<Int, Int>>, c: Int, a: Boolean): Int {
+fun maxSum(list: List<Pair<Int, Int>>, c: Int, a: Boolean): Pair<Int, Int> {
     if (list.isNotEmpty()) {
         if (list.last().first > c) {
             //print("$c out${list - list.last()} $listOfInd   ")
-            return maxSum(list - list.last(), c, a)
+            val res = maxSum(list - list.last(), c, a)
+            return Pair((res.first + list.last().first), (res.second + list.last().second))
         }
         val m = maxSum(list - list.last(), c, false)
         val m2 = maxSum(list - list.last(), c - list.last().first, false)
-        if (m2 + list[list.lastIndex].second > m) {
+        if (m2.second + list.last().second > m.second) {
             if (a) listOfInd.add(list.lastIndex)
             //print("$c L${list - list.last()} $listOfInd   ")
-            return maxSum(list - list.last(), c - list.last().first, a)
+            val res = maxSum(list - list.last(), c - list.last().first, a)
+            return Pair((res.first + list.last().first), (res.second + list.last().second))
         }
         //print("$c l${list - list.last()} $listOfInd   ")
-        return maxSum(list - list.last(), c, a)
+        val res = maxSum(list - list.last(), c, a)
+        return Pair((res.first + list.last().first), (res.second + list.last().second))
     }
-    return 0
+    return Pair(0, 0)
 }
 
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
@@ -413,9 +416,11 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     for (i in listOfInd) {
         res.add(names[i])
     }
+    //print("$h ")
     listOfInd.clear()
     return res
 }
+
 /*fun main() {
-    print("${bagPacking(mapOf(), 2)}")
+    print("${bagPacking(mapOf("0" to (1 to 2), "1" to (2 to 1)), 2)}")
 }*/
