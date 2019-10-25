@@ -107,16 +107,16 @@ fun dateStrToDigit(str: String): String {
  */
 fun dateDigitToStr(digital: String): String {
     val parts = digital.split(".")
-    val Num: Int
-    val Month: Int
-    val Year: Int
+    val num: Int
+    val month: Int
+    val year: Int
     if (parts.size == 3) {
         try {
-            Num = parts[0].toInt()
-            Month = parts[1].toInt()
-            Year = parts[2].toInt()
-            if (Num in 1..lesson2.task2.daysInMonth(Month, Year))
-                return String.format("$Num ${months[Month - 1]} $Year")
+            num = parts[0].toInt()
+            month = parts[1].toInt()
+            year = parts[2].toInt()
+            if (num in 1..lesson2.task2.daysInMonth(month, year))
+                return String.format("$num ${months[month - 1]} $year")
         } catch (e: NumberFormatException) {
             return ""
         }
@@ -148,16 +148,15 @@ fun flattenPhoneNumber(phone: String): String {
     if (s[0] == '+') {
         Plus = "+"
         s = s.substring(1)
-    }
-    else Plus = ""
+    } else Plus = ""
     if (s.isEmpty()) return ""
     var i = 0
     while (s[i] != '(' && i < s.length - 3) i += 1
     i1 = i
     if (s[i] == '(') i += 2
     while (s[i] != ')' && i < s.length - 1) i += 1
-    if (s[i] == ')') i2 = i
-    else i2 = i1
+    i2 = if (s[i] == ')') i
+    else i1
     if (i1 != i2) s = s.substring(0, i1) + s.substring(i1 + 1, i2) + s.substring(i2 + 1)
     if (s.isEmpty()) return ""
     for (i in 0 until s.length) {

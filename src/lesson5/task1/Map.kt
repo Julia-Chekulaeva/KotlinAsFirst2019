@@ -385,8 +385,7 @@ fun maxSum(list: List<Pair<Int, Int>>, c: Int, a: Boolean): Pair<Int, Int> {
     if (list.isNotEmpty()) {
         if (list.last().first > c) {
             //print("$c out${list - list.last()} $listOfInd   ")
-            val res = maxSum(list - list.last(), c, a)
-            return Pair((res.first + list.last().first), (res.second + list.last().second))
+            return maxSum(list - list.last(), c, a)
         }
         val m = maxSum(list - list.last(), c, false)
         val m2 = maxSum(list - list.last(), c - list.last().first, false)
@@ -397,8 +396,7 @@ fun maxSum(list: List<Pair<Int, Int>>, c: Int, a: Boolean): Pair<Int, Int> {
             return Pair((res.first + list.last().first), (res.second + list.last().second))
         }
         //print("$c l${list - list.last()} $listOfInd   ")
-        val res = maxSum(list - list.last(), c, a)
-        return Pair((res.first + list.last().first), (res.second + list.last().second))
+        return maxSum(list - list.last(), c, a)
     }
     return Pair(0, 0)
 }
