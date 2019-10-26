@@ -415,7 +415,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     for ((key, value) in treasures) {
         s.add(Triple(value.first, value.second, key))
     }
-    val h = maxSum(s.toList(), capacity, true)
+    val h = maxSum(s.toList(), capacity)
     val res = mutableSetOf<String>()
     for (elem in h.third) {
         res.add(elem)
