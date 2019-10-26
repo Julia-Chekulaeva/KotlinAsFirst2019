@@ -379,46 +379,44 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
-val listOfInd = mutableListOf<Int>()
+val listOfNames = mutableListOf<String>()
 
-fun maxSum(list: List<Pair<Int, Int>>, c: Int, a: Boolean): Pair<Int, Int> {
+fun maxSum(list: List<Triple<Int, Int, String>>, c: Int, a: Boolean): Pair<Int, Int> {
+    //println("")
+    //print("$c:  $list $listOfInd $a   ${list.lastIndex}   ")
     if (list.isNotEmpty()) {
         if (list.last().first > c) {
-            //print("$c out${list - list.last()} $listOfInd   ")
+            //print("out  ${list.last().third}")
             return maxSum(list - list.last(), c, a)
         }
         val m = maxSum(list - list.last(), c, false)
         val m2 = maxSum(list - list.last(), c - list.last().first, false)
         if (m2.second + list.last().second > m.second) {
-            if (a) listOfInd.add(list.lastIndex)
-            //print("$c L${list - list.last()} $listOfInd   ")
+            //print("include  ${list.last().third}")
+            if (a) listOfNames.add(list.last().third)
             val res = maxSum(list - list.last(), c - list.last().first, a)
             return Pair((res.first + list.last().first), (res.second + list.last().second))
         }
-        //print("$c l${list - list.last()} $listOfInd   ")
+        //if (a) print("notInc  ${list.last().third}")
         return maxSum(list - list.last(), c, a)
     }
     return Pair(0, 0)
 }
 
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    if (treasures.isEmpty()) return setOf<String>()
-    val s = mutableListOf<Pair<Int, Int>>()
-    val names = mutableListOf<String>()
-    val res = mutableSetOf<String>()
+    if (treasures.isEmpty()) return setOf()
+    val s = mutableListOf<Triple<Int, Int, String>>()
+    val res: Set<String>
     for ((key, value) in treasures) {
-        s.add(value)
-        names.add(key)
+        s.add(Triple(value.first, value.second, key))
     }
     val h = maxSum(s.toList(), capacity, true)
-    for (i in 0 until listOfInd.size) {
-        res.add(names[listOfInd[i]])
-    }
-    //print("$h ")
-    listOfInd.clear()
+    res = listOfNames.toSet()
+    //print("-  $h $res  end   ")
+    listOfNames.clear()
     return res
 }
 
-fun main() {
-    print("${bagPacking(mapOf("0" to (1 to 1)), 1)}")
-}
+/*fun main() {
+    print("${bagPacking(mapOf("0" to (1 to 1), "1" to (1 to 2), "2" to (1 to 1)), 1)}")
+}*/
