@@ -380,38 +380,47 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *   ) -> emptySet()
  */
 val listOfNames = mutableListOf<String>()
+var count = 0
 
-fun maxSum(list: List<Triple<Int, Int, String>>, c: Int, a: Boolean): Pair<Int, Int> {
-    //println("")
-    //print("$c:  $list $listOfInd $a   ${list.lastIndex}   ")
+fun maxSum(list: List<Triple<Int, Int, String>>, c: Int): Triple<Int, Int, List<String>> {
+    /*println("")
+    count += 1
+    print("$count:  $c $list $listOfNames   ${list.lastIndex}  ")*/
     if (list.isNotEmpty()) {
         if (list.last().first > c) {
             //print("out  ${list.last().third}")
-            return maxSum(list - list.last(), c, a)
+            return maxSum(list - list.last(), c)
         }
-        val m = maxSum(list - list.last(), c, false)
-        val m2 = maxSum(list - list.last(), c - list.last().first, false)
+        val m = maxSum(list - list.last(), c)
+        val m2 = maxSum(list - list.last(), c - list.last().first)
         if (m2.second + list.last().second > m.second) {
             //print("include  ${list.last().third}")
-            if (a) listOfNames.add(list.last().third)
-            val res = maxSum(list - list.last(), c - list.last().first, a)
-            return Pair((res.first + list.last().first), (res.second + list.last().second))
+            //if (a) listOfNames.add(list.last().third)
+            //val res = m2//maxSum(list - list.last(), c - list.last().first, a)
+            return Triple(
+                m2.first + list.last().first,
+                m2.second + list.last().second,
+                m2.third + list.last().third
+            )
         }
         //if (a) print("notInc  ${list.last().third}")
-        return maxSum(list - list.last(), c, a)
+        return m//maxSum(list - list.last(), c, a)
     }
-    return Pair(0, 0)
+    return Triple(0, 0, listOf())
 }
 
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
     if (treasures.isEmpty()) return setOf()
     val s = mutableListOf<Triple<Int, Int, String>>()
-    val res: Set<String>
     for ((key, value) in treasures) {
         s.add(Triple(value.first, value.second, key))
     }
     val h = maxSum(s.toList(), capacity, true)
-    res = listOfNames.toSet()
+    val res = mutableSetOf<String>()
+    for (elem in h.third) {
+        res.add(elem)
+    }
+    //val res = listOfNames.toSet()
     //print("-  $h $res  end   ")
     listOfNames.clear()
     return res
