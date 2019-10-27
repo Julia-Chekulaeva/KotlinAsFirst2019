@@ -2,6 +2,7 @@
 
 package lesson5.task1
 
+import javafx.scene.text.FontWeight
 import kotlin.math.max
 
 /**
@@ -379,13 +380,12 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
-val listOfNames = mutableListOf<String>()
+/*val listOfNames = mutableListOf<String>()
 var count = 0
 
 fun maxSum(list: List<Triple<Int, Int, String>>, c: Int): Triple<Int, Int, List<String>> {
-    /*println("")
     count += 1
-    print("$count:  $c $list $listOfNames   ${list.lastIndex}  ")*/
+    println("$count:  $c $list $listOfNames   ${list.lastIndex}  ")
     if (list.isNotEmpty()) {
         if (list.last().first > c) {
             //print("out  ${list.last().third}")
@@ -424,8 +424,63 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     //print("-  $h $res  end   ")
     listOfNames.clear()
     return res
+}*/
+
+var w = 0
+var maxPrice = 0
+val listOfNames = mutableSetOf<String>()
+var size = 0
+
+
+fun allVar(price: List<Int>, weight: List<Int>, names: List<String>, i: Int, sumWeight: Int, sumPrice: Int): Unit {
+    //println("$i $sumWeight $sumPrice ${names[i]} ${price[i]} ${weight[i]}")
+    if (sumWeight <= w && sumPrice > maxPrice) {
+        maxPrice = sumPrice
+        listOfNames.clear()
+        listOfNames.addAll(names)
+    }
+    if (i == 0) {
+        if (sumWeight - weight[i] <= w && sumPrice - price[i] > maxPrice) {
+            maxPrice = sumPrice - price[i]
+            listOfNames.clear()
+            listOfNames.addAll(names - names[i])
+        }
+    } else {
+        allVar(price, weight, names, i - 1, sumWeight, sumPrice)
+        if (i < size - 1) allVar(
+            price.subList(0, i) + price.subList(i + 1, size),
+            weight.subList(0, i) + weight.subList(i + 1, size),
+            names.subList(0, i) + names.subList(i + 1, size),
+            i - 1, sumWeight - weight[i], sumPrice - price[i]
+        )
+        else allVar(
+            price.subList(0, i),
+            weight.subList(0, i),
+            names.subList(0, i),
+            i - 1, sumWeight - weight[i], sumPrice - price[i]
+        )
+    }
+}
+
+
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    val Price = mutableListOf<Int>()
+    val Weight = mutableListOf<Int>()
+    val Names = mutableListOf<String>()
+    for ((key, value) in treasures) {
+        Price.add(value.second)
+        Weight.add(value.first)
+        Names.add(key)
+    }
+    listOfNames.clear()
+    size = Price.size
+    w = capacity
+    maxPrice = 0
+    //println(size)
+    allVar(Price, Weight, Names, size - 1, Weight.sum(), Price.sum())
+    return listOfNames.toSet()
 }
 
 /*fun main() {
-    print("${bagPacking(mapOf("0" to (1 to 1), "1" to (1 to 2), "2" to (1 to 1)), 1)}")
+    println(bagPacking(mapOf("0" to (1 to 1), "1" to (1 to 2), "2" to (1 to 1)), 1))
 }*/
