@@ -464,6 +464,7 @@ fun allVar(price: List<Int>, weight: List<Int>, names: List<String>, i: Int, sum
 
 
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    if (treasures.isEmpty()) return setOf<String>()
     val Price = mutableListOf<Int>()
     val Weight = mutableListOf<Int>()
     val Names = mutableListOf<String>()
