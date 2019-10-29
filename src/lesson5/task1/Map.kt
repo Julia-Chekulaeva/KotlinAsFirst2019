@@ -482,16 +482,17 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     return listOfNames.toSet()
 }*/
 
-fun main() {
+/*fun main() {
     println(bagPacking(mapOf("0" to (1 to 1), "1" to (1 to 2)), 2))
-    println(bagPacking(mapOf("0" to (1 to 1), "1" to (1 to 2), "2" to (1 to 1)), 2))
-}
+    //println(bagPacking(mapOf("0" to (1 to 1), "1" to (1 to 2), "2" to (1 to 1)), 2))
+}*/
 
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
     val t: Map<String, Pair<Int, Int>> = treasures.filter { it.value.first <= capacity }.toMap()
     val num = t.size
-    val names = mutableListOf<List<String>>()
-    for (i in 0..capacity) names.add(listOf())
+    val names = arrayOf<MutableList<Set<String>>>(mutableListOf(), mutableListOf())
+    for (j in 0..1)
+        for (i in 0..capacity) names[j].add(setOf())
     val name = mutableListOf<String>()
     val prices = mutableListOf<Int>()
     val weights = mutableListOf<Int>()
@@ -500,28 +501,30 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
         weights.add(value.first)
         prices.add(value.second)
     }
-    val allVar = mutableListOf<MutableList<Int>>()
-    for (i in 0..num) allVar.add(mutableListOf<Int>())
-    for (i in 0..capacity) allVar[0].add(0)
+    val maxPrice = mutableListOf<MutableList<Int>>()
+    for (i in 0..num) maxPrice.add(mutableListOf<Int>())
+    for (i in 0..capacity) maxPrice[0].add(0)
     for (i in 1..num) {
         //println("Код работает!!")
         for (j in 0..capacity) {
             //println("  $j")
-            if (weights[i - 1] > j) { //allVar[i][j] = allVar[i - 1][j]
-                allVar[i].add(allVar[i - 1][j])
-            }
-            else if (allVar[i - 1][j] > allVar[i - 1][j - weights[i - 1]] + prices[i - 1]) {
-                //allVar[i][j] = allVar[i - 1][j]
-                allVar[i].add(allVar[i - 1][j])
-            }
+            if (weights[i - 1] > j)
+                maxPrice[i].add(maxPrice[i - 1][j])
+            else if (maxPrice[i - 1][j] >= maxPrice[i - 1][j - weights[i - 1]] + prices[i - 1])
+                maxPrice[i].add(maxPrice[i - 1][j])
             else {
-                //allVar[i][j] = allVar[i - 1][j - weights[i - 1]] + prices[i - 1]
-                allVar[i].add(allVar[i - 1][j - weights[i - 1]] + prices[i - 1])
-                //names[j] = names[j - weights[i - 1]] + name[i - 1]
-                names.removeAt(j)
-                names.add(j, names[j - weights[i - 1]] + name[i - 1])
+                maxPrice[i].add(maxPrice[i - 1][j - weights[i - 1]] + prices[i - 1])
+                names[1].add(j, names[0][j - weights[i - 1]] + name[i - 1])
             }
+            //println("$i. $names")
+            //println("$maxPrice")
+            //println()
+        }
+        names[0].clear()
+        for (s in 0..capacity) {
+            names[0].add(names[1][s])
+            names[1][s] = setOf()
         }
     }
-    return names[capacity].toSet()
+    return names[0][capacity]
 }
