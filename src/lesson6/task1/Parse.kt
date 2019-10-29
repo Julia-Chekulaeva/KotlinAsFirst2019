@@ -116,7 +116,7 @@ fun dateDigitToStr(digital: String): String {
             month = parts[1].toInt()
             year = parts[2].toInt()
             if (num in 1..lesson2.task2.daysInMonth(month, year))
-                return String.format("$num ${months[month - 1]} $year")
+                return "$num ${months[month - 1]} $year"
         } catch (e: NumberFormatException) {
             return ""
         }
@@ -142,13 +142,13 @@ fun dateDigitToStr(digital: String): String {
 fun flattenPhoneNumber(phone: String): String {
     var s = phone.filter { it != ' ' && it != '-' }
     if (s == "") return s
-    val Plus: String
+    val plus: String
     val i1: Int
     val i2: Int
     if (s[0] == '+') {
-        Plus = "+"
+        plus = "+"
         s = s.substring(1)
-    } else Plus = ""
+    } else plus = ""
     if (s.isEmpty()) return ""
     var i = 0
     while (s[i] != '(' && i < s.length - 3) i += 1
@@ -164,7 +164,7 @@ fun flattenPhoneNumber(phone: String): String {
             return ""
         }
     }
-    return Plus + s
+    return plus + s
 }
 
 /**
@@ -178,15 +178,13 @@ fun flattenPhoneNumber(phone: String): String {
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 fun bestLongJump(jumps: String): Int {
-    val attempts = jumps.split(" ").toMutableList()
-    attempts.filter { it != "-" && it != "%" }
+    val attempts = jumps.split(" ").filter { it != "-" && it != "%" }
     var max = -1
     try {
         for (elem in attempts) {
             if (elem.toInt() > max) max = elem.toInt()
         }
-    }
-    catch (e: NumberFormatException) {
+    } catch (e: NumberFormatException) {
         return -1
     }
     return max

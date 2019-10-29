@@ -482,10 +482,10 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     return listOfNames.toSet()
 }*/
 
-/*fun main() {
-    println(bagPacking(mapOf("0" to (1 to 1), "1" to (1 to 2), "2" to (1 to 1)), 1))
-    println(bagPacking(mapOf("0" to (1 to 1), "1" to (1 to 1), "2" to (1 to 1)), 1))
-}*/
+fun main() {
+    println(bagPacking(mapOf("0" to (1 to 1), "1" to (1 to 2)), 2))
+    println(bagPacking(mapOf("0" to (1 to 1), "1" to (1 to 2), "2" to (1 to 1)), 2))
+}
 
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
     val t: Map<String, Pair<Int, Int>> = treasures.filter { it.value.first <= capacity }.toMap()
