@@ -76,18 +76,18 @@ val months = listOf(
 
 fun dateStrToDigit(str: String): String {
     val parts = str.split(" ")
-    val Num: Int
-    var Month = 0
-    val Year: Int
+    val num: Int
+    var month = 0
+    val year: Int
     if (parts.size == 3) {
         try {
-            Num = parts[0].toInt()
-            Year = parts[2].toInt()
+            num = parts[0].toInt()
+            year = parts[2].toInt()
             for (i in 0..11) {
-                if (parts[1] == months[i]) Month = i + 1
+                if (parts[1] == months[i]) month = i + 1
             }
-            if (Num in 1..lesson2.task2.daysInMonth(Month, Year))
-                return String.format("%02d.%02d.%d", Num, Month, Year)
+            if (num in 1..lesson2.task2.daysInMonth(month, year))
+                return String.format("%02d.%02d.%d", num, month, year)
         } catch (e: NumberFormatException) {
             return ""
         }
@@ -164,12 +164,6 @@ fun flattenPhoneNumber(phone: String): String {
             return ""
         }
     }
-    /*try {
-        num = numStr.toInt()
-    }
-    catch (e: NumberFormatException) {
-        return ""
-    }*/
     return Plus + s
 }
 

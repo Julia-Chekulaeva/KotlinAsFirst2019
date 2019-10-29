@@ -3,6 +3,7 @@
 package lesson5.task1
 
 import javafx.scene.text.FontWeight
+import kotlinx.html.I
 import kotlin.math.max
 
 /**
@@ -424,7 +425,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     //print("-  $h $res  end   ")
     listOfNames.clear()
     return res
-}*/
+}
 
 var w = 0
 var maxPrice = 0
@@ -479,9 +480,48 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     println(Price.size)
     allVar(Price, Weight, Names, Price.size - 1, Weight.sum(), Price.sum())
     return listOfNames.toSet()
-}
+}*/
 
 /*fun main() {
-    //println(bagPacking(mapOf("0" to (1 to 1), "1" to (1 to 2), "2" to (1 to 1)), 1))
+    println(bagPacking(mapOf("0" to (1 to 1), "1" to (1 to 2), "2" to (1 to 1)), 1))
     println(bagPacking(mapOf("0" to (1 to 1), "1" to (1 to 1), "2" to (1 to 1)), 1))
 }*/
+
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    val t: Map<String, Pair<Int, Int>> = treasures.filter { it.value.first <= capacity }.toMap()
+    val num = t.size
+    val names = mutableListOf<List<String>>()
+    for (i in 0..capacity) names.add(listOf())
+    val name = mutableListOf<String>()
+    val prices = mutableListOf<Int>()
+    val weights = mutableListOf<Int>()
+    for ((key, value) in t) {
+        name.add(key)
+        weights.add(value.first)
+        prices.add(value.second)
+    }
+    val allVar = mutableListOf<MutableList<Int>>()
+    for (i in 0..num) allVar.add(mutableListOf<Int>())
+    for (i in 0..capacity) allVar[0].add(0)
+    for (i in 1..num) {
+        //println("Код работает!!")
+        for (j in 0..capacity) {
+            //println("  $j")
+            if (weights[i - 1] > j) { //allVar[i][j] = allVar[i - 1][j]
+                allVar[i].add(allVar[i - 1][j])
+            }
+            else if (allVar[i - 1][j] > allVar[i - 1][j - weights[i - 1]] + prices[i - 1]) {
+                //allVar[i][j] = allVar[i - 1][j]
+                allVar[i].add(allVar[i - 1][j])
+            }
+            else {
+                //allVar[i][j] = allVar[i - 1][j - weights[i - 1]] + prices[i - 1]
+                allVar[i].add(allVar[i - 1][j - weights[i - 1]] + prices[i - 1])
+                //names[j] = names[j - weights[i - 1]] + name[i - 1]
+                names.removeAt(j)
+                names.add(j, names[j - weights[i - 1]] + name[i - 1])
+            }
+        }
+    }
+    return names[capacity].toSet()
+}
