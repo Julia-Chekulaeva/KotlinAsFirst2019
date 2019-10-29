@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import java.text.NumberFormat
+
 /**
  * Пример
  *
@@ -159,8 +161,8 @@ fun flattenPhoneNumber(phone: String): String {
     else i1
     if (i1 != i2) s = s.substring(0, i1) + s.substring(i1 + 1, i2) + s.substring(i2 + 1)
     if (s.isEmpty()) return ""
-    for (i in 0 until s.length) {
-        if (s[i] !in '0'..'9') {
+    for (j in 0 until s.length) {
+        if (s[j] !in '0'..'9') {
             return ""
         }
     }
@@ -201,7 +203,30 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    val s = jumps.split(" ")
+    val high = mutableListOf<Int>()
+    val attempts = mutableListOf<String>()
+    if (s.size % 2 == 0) {
+        try {
+            for (i in 0 until s.size / 2) {
+                high.add(s[2 * i].toInt())
+                if (s[2 * i + 1].substring(0, s[2 * i + 1].lastIndex).filter { it != '%' } == "" &&
+                    (s[2 * i + 1].last() == '%' || s[2 * i + 1].last() == '-' || s[2 * i + 1].last() == '+'))
+                    attempts.add(s[2 * i + 1])
+                else high.add("a".toInt())
+            }
+        } catch (e: NumberFormatException) {
+            return -1
+        }
+        var max = -1
+        for (i in 0 until s.size / 2) {
+            if (attempts[i].last() == '+' && high[i] > max) max = high[i]
+        }
+        return max
+    }
+    return -1
+}
 
 /**
  * Сложная

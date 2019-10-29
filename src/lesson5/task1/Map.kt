@@ -381,112 +381,6 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
-/*val listOfNames = mutableListOf<String>()
-var count = 0
-
-fun maxSum(list: List<Triple<Int, Int, String>>, c: Int): Triple<Int, Int, List<String>> {
-    count += 1
-    println("$count:  $c $list $listOfNames   ${list.lastIndex}  ")
-    if (list.isNotEmpty()) {
-        if (list.last().first > c) {
-            //print("out  ${list.last().third}")
-            return maxSum(list - list.last(), c)
-        }
-        val m = maxSum(list - list.last(), c)
-        val m2 = maxSum(list - list.last(), c - list.last().first)
-        if (m2.second + list.last().second > m.second) {
-            //print("include  ${list.last().third}")
-            //if (a) listOfNames.add(list.last().third)
-            //val res = m2//maxSum(list - list.last(), c - list.last().first, a)
-            return Triple(
-                m2.first + list.last().first,
-                m2.second + list.last().second,
-                m2.third + list.last().third
-            )
-        }
-        //if (a) print("notInc  ${list.last().third}")
-        return m//maxSum(list - list.last(), c, a)
-    }
-    return Triple(0, 0, listOf())
-}
-
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    if (treasures.isEmpty()) return setOf()
-    val s = mutableListOf<Triple<Int, Int, String>>()
-    for ((key, value) in treasures) {
-        s.add(Triple(value.first, value.second, key))
-    }
-    val h = maxSum(s.toList(), capacity)
-    val res = mutableSetOf<String>()
-    for (elem in h.third) {
-        res.add(elem)
-    }
-    //val res = listOfNames.toSet()
-    //print("-  $h $res  end   ")
-    listOfNames.clear()
-    return res
-}
-
-var w = 0
-var maxPrice = 0
-val listOfNames = mutableSetOf<String>()
-
-
-fun allVar(price: List<Int>, weight: List<Int>, names: List<String>, i: Int, sumWeight: Int, sumPrice: Int): Unit {
-    //println("$i $sumWeight $sumPrice ${names[i]} ${price[i]} ${weight[i]}")
-    if (sumWeight <= w && sumPrice > maxPrice) {
-        maxPrice = sumPrice
-        listOfNames.clear()
-        listOfNames.addAll(names)
-    }
-    if (i == 0) {
-        if (sumWeight - weight[i] <= w && sumPrice - price[i] > maxPrice) {
-            maxPrice = sumPrice - price[i]
-            listOfNames.clear()
-            listOfNames.addAll(names - names[i])
-        }
-    } else {
-        allVar(price, weight, names, i - 1, sumWeight, sumPrice)
-        val size = price.size
-        if (i < size - 1) allVar(
-                price.subList(0, i) + price.subList(i + 1, size),
-                weight.subList(0, i) + weight.subList(i + 1, size),
-                names.subList(0, i) + names.subList(i + 1, size),
-                i - 1, sumWeight - weight[i], sumPrice - price[i]
-            )
-        else allVar(
-            price.subList(0, i),
-            weight.subList(0, i),
-            names.subList(0, i),
-            i - 1, sumWeight - weight[i], sumPrice - price[i]
-        )
-    }
-}
-
-
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    if (treasures.isEmpty()) return setOf<String>()
-    val Price = mutableListOf<Int>()
-    val Weight = mutableListOf<Int>()
-    val Names = mutableListOf<String>()
-    for ((key, value) in treasures) {
-        Price.add(value.second)
-        Weight.add(value.first)
-        Names.add(key)
-    }
-    listOfNames.clear()
-    w = capacity
-    maxPrice = 0
-    println(Price.size)
-    allVar(Price, Weight, Names, Price.size - 1, Weight.sum(), Price.sum())
-    return listOfNames.toSet()
-}*/
-
-/*fun main() {
-    println(bagPacking(mapOf("0" to (1 to 1), "1" to (1 to 2)), 2))
-    println(bagPacking(mapOf("0" to (1 to 1), "1" to (1 to 2), "2" to (1 to 1)), 2))
-}*/
-
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
     val t: Map<String, Pair<Int, Int>> = treasures.filter { it.value.first <= capacity }.toMap()
     val num = t.size
@@ -505,9 +399,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     for (i in 0..num) maxPrice.add(mutableListOf<Int>())
     for (i in 0..capacity) maxPrice[0].add(0)
     for (i in 1..num) {
-        //println("Код работает!!")
         for (j in 0..capacity) {
-            //println("  $j")
             if (weights[i - 1] > j)
                 maxPrice[i].add(maxPrice[i - 1][j])
             else if (maxPrice[i - 1][j] >= maxPrice[i - 1][j - weights[i - 1]] + prices[i - 1])
@@ -516,9 +408,6 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
                 maxPrice[i].add(maxPrice[i - 1][j - weights[i - 1]] + prices[i - 1])
                 names[1][j] = names[0][j - weights[i - 1]] + name[i - 1]
             }
-            /*println("$i. ${names[1]}")
-            println("$maxPrice")
-            println()*/
         }
         for (s in 0..capacity) names[0][s] = names[1][s]
     }
