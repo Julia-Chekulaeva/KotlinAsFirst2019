@@ -484,7 +484,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
 
 /*fun main() {
     println(bagPacking(mapOf("0" to (1 to 1), "1" to (1 to 2)), 2))
-    //println(bagPacking(mapOf("0" to (1 to 1), "1" to (1 to 2), "2" to (1 to 1)), 2))
+    println(bagPacking(mapOf("0" to (1 to 1), "1" to (1 to 2), "2" to (1 to 1)), 2))
 }*/
 
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
@@ -514,17 +514,13 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
                 maxPrice[i].add(maxPrice[i - 1][j])
             else {
                 maxPrice[i].add(maxPrice[i - 1][j - weights[i - 1]] + prices[i - 1])
-                names[1].add(j, names[0][j - weights[i - 1]] + name[i - 1])
+                names[1][j] = names[0][j - weights[i - 1]] + name[i - 1]
             }
-            //println("$i. $names")
-            //println("$maxPrice")
-            //println()
+            /*println("$i. ${names[1]}")
+            println("$maxPrice")
+            println()*/
         }
-        names[0].clear()
-        for (s in 0..capacity) {
-            names[0].add(names[1][s])
-            names[1][s] = setOf()
-        }
+        for (s in 0..capacity) names[0][s] = names[1][s]
     }
-    return names[0][capacity]
+    return names[1][capacity]
 }
