@@ -44,7 +44,7 @@ fun timeSecondsToStr(seconds: Int): String {
 /**
  * Пример: консольный ввод
  */
-fun main() {
+/*fun main() {
     println("Введите время в формате ЧЧ:ММ:СС")
     val line = readLine()
     if (line != null) {
@@ -57,7 +57,7 @@ fun main() {
     } else {
         println("Достигнут <конец файла> в процессе чтения строки. Программа прервана")
     }
-}
+}*/
 
 
 /**
@@ -244,8 +244,10 @@ fun plusMinus(expression: String): Int {
     var c: Int
     if (counter.size % 2 == 1) {
         try {
+            if (counter[0].isEmpty()) throw IllegalArgumentException()
             sum = if (counter[0][0] != '+' && counter[0][0] != '-') counter[0].toInt() else "a".toInt()
             for (i in 1..counter.size / 2) {
+                if (counter[2 * i].isEmpty()) throw IllegalArgumentException()
                 c = if (counter[2 * i][0] != '+' && counter[2 * i][0] != '-') counter[2 * i].toInt() else "a".toInt()
                 when(counter[2 * i - 1]) {
                     "+" -> sum += c
