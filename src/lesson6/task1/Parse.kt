@@ -326,6 +326,7 @@ fun mostExpensive(description: String): String {
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
+
 fun fromRoman(roman: String): Int {
     if (roman == "") return -1
     val digits = listOf(
