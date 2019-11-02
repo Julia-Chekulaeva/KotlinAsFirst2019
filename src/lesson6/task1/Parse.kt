@@ -155,8 +155,8 @@ fun flattenPhoneNumber(phone: String): String {
     var i = 0
     while (s[i] != '(' && i < s.length - 3) i += 1
     i1 = i
-    if (s[i] == '(') i += 2
-    while (s[i] != ')' && i < s.length - 1) i += 1
+    if (s[i] == '(' && i + 2 < s.length) i += 2
+    if (i != i1) while (s[i] != ')' && i < s.length - 1) i += 1
     i2 = if (s[i] == ')') i
     else i1
     if (i1 != i2) s = s.substring(0, i1) + s.substring(i1 + 1, i2) + s.substring(i2 + 1)
