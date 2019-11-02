@@ -326,7 +326,58 @@ fun mostExpensive(description: String): String {
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    if (roman == "") return -1
+    val digits = listOf(
+        listOf('M' to 1000, 'M' to 1000),
+        listOf('D' to 500, 'C' to 100),
+        listOf('L' to 50, 'X' to 10),
+        listOf('V' to 5, 'I' to 1)
+    )
+    var j = 0
+    var res = 0
+    var canUse = true
+    for (i in 0..2) {
+        if (roman[i] == digits[0][0].first) {
+            res += digits[0][0].second
+            j++
+            if (j == roman.length) return res
+        } else break
+    }
+    for (i in 1..3) {
+        if (roman[j] == digits[i][0].first) {
+            res += digits[i][0].second
+            j++
+            if (j == roman.length) return res
+            canUse = false
+        }
+        if (roman[j] == digits[i][1].first) {
+            if (j == roman.lastIndex) return res + digits[i][1].second
+            when {
+                roman[j + 1] == digits[i][0].first && canUse -> {
+                    res += digits[i][0].second - digits[i][1].second
+                    j += 2
+                }
+                roman[j + 1] == digits[i - 1][1].first && canUse -> {
+                    res += digits[i - 1][1].second - digits[i][1].second
+                    j += 2
+                }
+                else -> {
+                    for (a in 0..2) {
+                        if (roman[j] == digits[i][1].first) {
+                            res += digits[i][1].second
+                            j++
+                            if (j == roman.length) return res
+                        } else break
+                    }
+                }
+            }
+        }
+        canUse = true
+    }
+    if (j < roman.length) return -1
+    return res
+}
 
 /**
  * Очень сложная
