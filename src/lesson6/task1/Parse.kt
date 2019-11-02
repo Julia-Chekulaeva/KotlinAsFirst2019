@@ -44,7 +44,7 @@ fun timeSecondsToStr(seconds: Int): String {
 /**
  * Пример: консольный ввод
  */
-/*fun main() {
+fun main() {
     println("Введите время в формате ЧЧ:ММ:СС")
     val line = readLine()
     if (line != null) {
@@ -57,7 +57,7 @@ fun timeSecondsToStr(seconds: Int): String {
     } else {
         println("Достигнут <конец файла> в процессе чтения строки. Программа прервана")
     }
-}*/
+}
 
 
 /**
@@ -249,7 +249,7 @@ fun plusMinus(expression: String): Int {
             for (i in 1..counter.size / 2) {
                 if (counter[2 * i].isEmpty()) throw IllegalArgumentException()
                 c = if (counter[2 * i][0] != '+' && counter[2 * i][0] != '-') counter[2 * i].toInt() else "a".toInt()
-                when(counter[2 * i - 1]) {
+                when (counter[2 * i - 1]) {
                     "+" -> sum += c
                     "-" -> sum -= c
                     else -> throw IllegalArgumentException()
@@ -302,7 +302,7 @@ fun mostExpensive(description: String): String {
         for (elem in s) {
             things.addAll(elem.split(" "))
             if (things.size == 2) {
-                if (things[1].toDouble() > maxSum) {
+                if (things[1].toDouble() >= maxSum) {
                     maxSum = things[1].toDouble()
                     bestGood = things[0]
                 }
@@ -326,7 +326,46 @@ fun mostExpensive(description: String): String {
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int = TODO()/*{
+    val digits = mapOf(
+        "I" to 1, "IV" to 4, "V" to 5, "IX" to 9, "X" to 10, "XL" to 40, "L" to 50,
+        "XC" to 90, "C" to 100, "CD" to 400, "D" to 500, "CM" to 900, "M" to 1000
+    )
+    var i = 0
+    var j: Int
+    var count = 0
+    var d = 0
+    var lastCount = 5000
+    while (i < roman.length) {
+        if (roman.substring(i, i + 2) in digits) {
+            d = digits[roman.substring(i, i + 2)]!!
+            if (d < lastCount) {
+                count += d
+                i += 2
+                lastCount = d
+            } else return -1
+        } else if (roman.substring(i, i + 1) in digits) {
+            d = digits[roman.substring(i, i + 1)]!!
+            if (d < lastCount) {
+                if (d == 1 || d == 10 || d == 100 || d == 1000) {
+                    j = 0
+                    while (j < 3) {
+                        if (roman[i] == roman[i - j]) {
+                            count += d
+                            j += 1
+                            i += 1
+                        } else j = 4
+                    }
+                } else {
+                    count += d
+                    i += 1
+                }
+                lastCount = d
+            } else return -1
+        } else return -1
+    }
+    return count
+}*/
 
 /**
  * Очень сложная
