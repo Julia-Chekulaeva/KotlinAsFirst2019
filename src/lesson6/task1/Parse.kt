@@ -143,8 +143,9 @@ fun dateDigitToStr(digital: String): String {
 
 fun flattenPhoneNumber(phone: String): String {
     var s = phone.filter { it != ' ' && it != '-' }
-    if (s == "") return s
-    val plus: String
+    if (s.matches(Regex("""(\+\d+)?(\(\d+\))?\d+"""))) return s.filter { it != '(' && it != ')' }
+    return ""
+    /*val plus: String
     val i1: Int
     val i2: Int
     if (s[0] == '+') {
@@ -166,7 +167,7 @@ fun flattenPhoneNumber(phone: String): String {
             return ""
         }
     }
-    return plus + s
+    return plus + s*/
 }
 
 /**
@@ -326,10 +327,13 @@ fun mostExpensive(description: String): String {
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
+
 fun fromRoman(roman: String): Int {
-    if (roman == "") return -1
+    if (!roman.matches(Regex("""M{0,3}((D?C{0,3})|(CD)|(CM))((L?X{0,3})|(XL)|(XC))((V?I{0,3})|(IV)|(IX))"""))
+        || roman.isEmpty()
+    ) return -1
     val digits = listOf(
-        listOf('M' to 1000, 'M' to 1000),
+        listOf('S' to 10000, 'M' to 1000),
         listOf('D' to 500, 'C' to 100),
         listOf('L' to 50, 'X' to 10),
         listOf('V' to 5, 'I' to 1)
@@ -338,8 +342,8 @@ fun fromRoman(roman: String): Int {
     var res = 0
     var canUse = true
     for (i in 0..2) {
-        if (roman[i] == digits[0][0].first) {
-            res += digits[0][0].second
+        if (roman[i] == digits[0][1].first) {
+            res += digits[0][1].second
             j++
             if (j == roman.length) return res
         } else break
@@ -375,11 +379,10 @@ fun fromRoman(roman: String): Int {
         }
         canUse = true
     }
-    if (j < roman.length) return -1
     return res
 }
 
-/**
+/*
  * Очень сложная
  *
  * Имеется специальное устройство, представляющее собой
