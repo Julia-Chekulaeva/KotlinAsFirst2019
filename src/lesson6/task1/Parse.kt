@@ -142,7 +142,7 @@ fun dateDigitToStr(digital: String): String {
  */
 
 fun flattenPhoneNumber(phone: String): String {
-    var s = phone.filter { it != ' ' && it != '-' }
+    val s = phone.filter { it != ' ' && it != '-' }
     if (s.matches(Regex("""(\+\d+)?(\(\d+\))?\d+"""))) return s.filter { it != '(' && it != ')' }
     return ""
     /*val plus: String
@@ -418,4 +418,49 @@ fun fromRoman(roman: String): Int {
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    if (!commands.matches(Regex("""[<>+\-\[\] ]*"""))) throw IllegalArgumentException()
+    //val brakets = commands.filter { it == '[' || it == ']' }
+    var j = 0
+    val firstToLast = mutableMapOf<Int, Int>()
+    val lastToFirst = mutableMapOf<Int, Int>()
+    val indOfBraket = mutableListOf<Int>()
+    for (i in 0 until commands.length) {
+        if (commands[i] == '[') {
+            j++
+            indOfBraket.add(i)
+        }
+        if (commands[i] == ']') {
+            if (j == 0) throw IllegalArgumentException()
+            j--
+            firstToLast[indOfBraket.last()] = i
+            lastToFirst[i] = indOfBraket.last()
+            indOfBraket.removeAt(indOfBraket.lastIndex)
+        }
+    }
+    if (j != 0) throw IllegalArgumentException()
+    val cellValue = mutableListOf<Int>()
+    for (i in 0 until cells) cellValue.add(0)
+    j = cells / 2
+    var commNum = 0
+    var ind = 0
+    while (ind < commands.length) {
+        if (commNum < limit) when (commands[ind]) {
+            '>' -> {
+                j++
+                if (j == cells) throw IllegalStateException()
+            }
+            '<' -> {
+                j--
+                if (j == -1) throw IllegalStateException()
+            }
+            '+' -> cellValue[j]++
+            '-' -> cellValue[j]--
+            '[' -> if (cellValue[j] == 0) ind = firstToLast[ind]!!
+            ']' -> if (cellValue[j] != 0) ind = lastToFirst[ind]!!
+        }
+        commNum++
+        ind++
+    }
+    return cellValue.toList()
+}
