@@ -145,7 +145,8 @@ fun flattenPhoneNumber(phone: String): String {
     val s = phone.filter { it != ' ' && it != '-' }
     if (s.matches(Regex("""(\+\d+)?(\(\d+\))?\d+"""))) return s.filter { it != '(' && it != ')' }
     return ""
-    /*val plus: String
+}
+/*val plus: String
     val i1: Int
     val i2: Int
     if (s[0] == '+') {
@@ -168,7 +169,6 @@ fun flattenPhoneNumber(phone: String): String {
         }
     }
     return plus + s*/
-}
 
 /**
  * Средняя
@@ -349,6 +349,7 @@ fun fromRoman(roman: String): Int {
         } else break
     }
     for (i in 1..3) {
+        if (j == roman.length) return res
         if (roman[j] == digits[i][0].first) {
             res += digits[i][0].second
             j++
