@@ -3,6 +3,7 @@
 package lesson7.task1
 
 import java.io.File
+import kotlin.math.max
 
 /**
  * Пример
@@ -53,7 +54,21 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    val res = mutableMapOf<String, Int>()
+    for (string in substrings) {
+        res[string] = 0
+        val s = string.length
+        val lowStr = string.toLowerCase()
+        for (line in File(inputName).readLines()) {
+            val lowLine = line.toLowerCase()
+            for (i in 0..line.length - s) {
+                if (lowLine.substring(i, i + s) == lowStr) res[string] = res[string]!! + 1
+            }
+        }
+    }
+    return res
+}
 
 
 /**
@@ -70,7 +85,27 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  *
  */
 fun sibilants(inputName: String, outputName: String) {
-    TODO()
+    var notFirstUse = false
+    File(outputName).bufferedWriter().use {
+        for (line in File(inputName).readLines()) {
+            if (notFirstUse) it.newLine()
+            else notFirstUse = true
+            if (line.isEmpty()) continue
+            it.write(line[0].toString())
+            for (i in 1 until line.length) {
+                if (line.substring(i - 1, i + 1).toLowerCase().matches(Regex("""[жчшщ][ыяю]"""))) {
+                    when (line[i]) {
+                        'ы' -> it.write("и")
+                        'я' -> it.write("а")
+                        'ю' -> it.write("у")
+                        'Ы' -> it.write("И")
+                        'Я' -> it.write("А")
+                        'Ю' -> it.write("У")
+                    }
+                } else it.write(line[i].toString())
+            }
+        }
+    }
 }
 
 /**
@@ -91,7 +126,18 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+    var maxLength = 0
+    for (line in File(inputName).readLines()) maxLength = max(maxLength, line.trim().length)
+    File(outputName).bufferedWriter().use {
+        var notFirstUse = false
+        for (line in File(inputName).readLines()) {
+            val lineTrim = line.trim()
+            if (notFirstUse) it.newLine()
+            else notFirstUse = true
+            for (i in 1..(maxLength - lineTrim.length) / 2) it.write(" ")
+            it.write(lineTrim)
+        }
+    }
 }
 
 /**
@@ -122,7 +168,31 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    val lines = mutableListOf<List<String>>()
+    val length = mutableListOf<Int>()
+    var maxLength = 0
+    for (line in File(inputName).readLines()) {
+        lines.add(line.trim().split(Regex(""" +""")))
+        length.add(line.filter { it != ' ' }.length)
+        maxLength = max(maxLength, length.last() + lines.last().size - 1)
+    }
+    File(outputName).bufferedWriter().use {
+        var notFirstUse = false
+        for (i in 0 until length.size) {
+            if (notFirstUse) it.newLine()
+            else notFirstUse = true
+            it.write(lines[i][0])
+            if (lines[i].size < 2) continue
+            val tabCount = lines[i].size - 1
+            val tabBetween = (maxLength - length[i]) / tabCount
+            val pointOfDiff = (maxLength - length[i]) % tabCount
+            for (j in 1..tabCount) {
+                for (s in 1..tabBetween) it.write(" ")
+                if (j <= pointOfDiff) it.write(" ")
+                it.write(lines[i][j])
+            }
+        }
+    }
 }
 
 /**
@@ -143,7 +213,14 @@ fun alignFileByWidth(inputName: String, outputName: String) {
  * Ключи в ассоциативном массиве должны быть в нижнем регистре.
  *
  */
-fun top20Words(inputName: String): Map<String, Int> = TODO()
+/*fun main() {
+    for (line in File("input/top20.txt").readLines()) println(line)
+}*/
+fun top20Words(inputName: String): Map<String, Int> = TODO()/*{
+    for (line in File)
+    можно использовать мапу
+    Regex("""[a-zA-Zа-яА-Я""").findAll(string, startIndex)
+}*/
 
 /**
  * Средняя
