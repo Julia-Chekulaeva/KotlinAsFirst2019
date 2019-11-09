@@ -234,11 +234,12 @@ fun mostExpensive(description: String): String {
     var maxSum = 0.0
     var bestGood = ""
     for (elem in s) {
-        if (elem.split(" ").size != 2) return ""
-        val price = elem.split(" ")[1].toDoubleOrNull() ?: return ""
+        val goodPrice = elem.split(" ")
+        if (goodPrice.size != 2) return ""
+        val price = goodPrice[1].toDoubleOrNull() ?: return ""
         if (price >= maxSum) {
             maxSum = price
-            bestGood = elem.split(" ")[0]
+            bestGood = goodPrice[0]
         }
     }
     return bestGood
