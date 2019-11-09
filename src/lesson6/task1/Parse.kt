@@ -82,6 +82,7 @@ fun dateStrToDigit(str: String): String {
     val num = parts[0].toIntOrNull()
     val year = parts[2].toIntOrNull()
     val month = months.indexOf(parts[1]) + 1
+    println(month)
     if (num ?: 0 in 1..lesson2.task2.daysInMonth(month, year ?: 0) && year != null)
         return String.format("%02d.%02d.%d", num, month, year)
     return ""
@@ -143,8 +144,7 @@ fun bestLongJump(jumps: String): Int {
     val attempts = jumps.split(" ").filter { it != "-" && it != "%" }
     var max = -1
     for (elem in attempts) {
-        val s = elem.toIntOrNull() ?: -1
-        if (s < 0) return -1
+        val s = elem.toIntOrNull() ?: return -1
         max = maxOf(max, s)
     }
     return max
@@ -190,7 +190,7 @@ fun plusMinus(expression: String): Int {
     val counter = expression.split(" ")
     var sum = counter[0].toInt()
     for (i in 1..counter.size / 2) {
-        val c = if (counter[2 * i][0] != '+' && counter[2 * i][0] != '-') counter[2 * i].toInt() else "a".toInt()
+        val c = counter[2 * i].toInt()
         when (counter[2 * i - 1]) {
             "+" -> sum += c
             "-" -> sum -= c
@@ -331,7 +331,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
         }
     }
     if (indOfBraket.isNotEmpty()) throw IllegalArgumentException()
-    val cellValue = mutableListOf<Int>()
+    val cellValue = MutableList(3) { 0 }
     for (i in 0 until cells) cellValue.add(0)
     var j = cells / 2
     var commNum = 0
