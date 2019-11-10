@@ -331,7 +331,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
         }
     }
     if (indOfBraket.isNotEmpty()) throw IllegalArgumentException()
-    val cellValue = MutableList(3) { 0 }
+    val cellValue = MutableList(cells) { 0 }
     var j = cells / 2
     var commNum = 0
     var ind = 0
