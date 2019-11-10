@@ -213,9 +213,6 @@ fun alignFileByWidth(inputName: String, outputName: String) {
  * Ключи в ассоциативном массиве должны быть в нижнем регистре.
  *
  */
-fun main() {
-    val s = mapOf(10 to "a", 2 to "aa")
-}
 fun top20Words(inputName: String): Map<String, Int> {
     val countOfWords = mutableMapOf<String, Int>()
     val topWords = mutableListOf<Pair<String, Int>>()
@@ -274,7 +271,22 @@ fun top20Words(inputName: String): Map<String, Int> {
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
-    TODO()
+    File(outputName).bufferedWriter().use {
+        var notFirstUse = false
+        for (line in File(inputName).readLines()) {
+            if (notFirstUse) it.newLine()
+            notFirstUse = true
+            for (char in line) {
+                if (dictionary[char.toLowerCase()] == null && dictionary[char.toUpperCase()] == null) {
+                    it.write(char.toString())
+                    continue
+                }
+                if (char in 'А'..'Я' || char in 'A'..'Z')
+                    it.write((dictionary[char.toLowerCase()] ?: dictionary[char.toUpperCase()]!!).toLowerCase().capitalize())
+                else it.write((dictionary[char.toLowerCase()] ?: dictionary[char.toUpperCase()]!!).toLowerCase())
+            }
+        }
+    }
 }
 
 /**
