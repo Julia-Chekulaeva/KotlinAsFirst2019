@@ -282,7 +282,9 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                     continue
                 }
                 if (char in 'А'..'Я' || char in 'A'..'Z')
-                    it.write((dictionary[char.toLowerCase()] ?: dictionary[char.toUpperCase()]!!).toLowerCase().capitalize())
+                    it.write(
+                        (dictionary[char.toLowerCase()] ?: dictionary[char.toUpperCase()]!!).toLowerCase().capitalize()
+                    )
                 else it.write((dictionary[char.toLowerCase()] ?: dictionary[char.toUpperCase()]!!).toLowerCase())
             }
         }
@@ -314,7 +316,22 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
-    TODO()
+    var maxSize = 0
+    var words = ""
+    for (line in File(inputName).readLines()) {
+        val s = line.trim()
+        val size = s.length
+        if (s.toLowerCase().toSet().size == size && size >= maxSize) {
+            if (size == maxSize) words += ", $s"
+            else {
+                maxSize = size
+                words = s
+            }
+        }
+    }
+    File(outputName).bufferedWriter().use {
+        it.write(words)
+    }
 }
 
 /**
