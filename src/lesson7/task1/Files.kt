@@ -229,9 +229,9 @@ fun top20Words(inputName: String): Map<String, Int> {
         for (i in 0..19) {
             if (count >= topWords[i].second) {
                 topWords.add(i, Pair(word, count))
+                if (topWords.size > 20) topWords.removeAt(20)
                 break
             }
-            if (topWords.size > 20) topWords.removeAt(20)
         }
     }
     while (topWords.last() == ("" to 0)) topWords.removeAt(topWords.lastIndex)
