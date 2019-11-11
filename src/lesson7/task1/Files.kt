@@ -262,7 +262,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                 it.write(char.toString())
                 continue
             }
-            if (char in 'А'..'Я' || char in 'A'..'Z') it.write(dictionaryLow[char.toLowerCase()]!!.capitalize())
+            if (char.isUpperCase()) it.write(dictionaryLow[char.toLowerCase()]!!.capitalize())
             else it.write(dictionaryLow[char.toLowerCase()]!!)
         }
     }
