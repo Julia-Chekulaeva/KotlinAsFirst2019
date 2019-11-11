@@ -86,11 +86,8 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  *
  */
 fun sibilants(inputName: String, outputName: String) {
-    var notFirstUse = false
     File(outputName).bufferedWriter().use {
         for (line in File(inputName).readLines()) {
-            if (notFirstUse) it.newLine()
-            else notFirstUse = true
             if (line.isEmpty()) continue
             it.write(line[0].toString())
             for (i in 1 until line.length) {
@@ -105,6 +102,7 @@ fun sibilants(inputName: String, outputName: String) {
                     }
                 } else it.write(line[i].toString())
             }
+            it.newLine()
         }
     }
 }
@@ -130,13 +128,11 @@ fun centerFile(inputName: String, outputName: String) {
     var maxLength = 0
     for (line in File(inputName).readLines()) maxLength = max(maxLength, line.trim().length)
     File(outputName).bufferedWriter().use {
-        var notFirstUse = false
         for (line in File(inputName).readLines()) {
             val lineTrim = line.trim()
-            if (notFirstUse) it.newLine()
-            else notFirstUse = true
             for (i in 1..(maxLength - lineTrim.length) / 2) it.write(" ")
             it.write(lineTrim)
+            it.newLine()
         }
     }
 }
@@ -174,14 +170,11 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     var maxLength = 0
     for (line in File(inputName).readLines()) {
         lines.add(line.trim().split(Regex(""" +""")))
-        length.add(line.filter { it != ' ' }.length)
+        length.add(line.count { it != ' ' })
         maxLength = max(maxLength, length.last() + lines.last().size - 1)
     }
     File(outputName).bufferedWriter().use {
-        var notFirstUse = false
         for (i in 0 until length.size) {
-            if (notFirstUse) it.newLine()
-            else notFirstUse = true
             it.write(lines[i][0])
             if (lines[i].size < 2) continue
             val tabCount = lines[i].size - 1
@@ -192,6 +185,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
                 if (j <= pointOfDiff) it.write(" ")
                 it.write(lines[i][j])
             }
+            it.newLine()
         }
     }
 }
@@ -216,24 +210,13 @@ fun alignFileByWidth(inputName: String, outputName: String) {
  */
 fun top20Words(inputName: String): Map<String, Int> {
     val countOfWords = mutableMapOf<String, Int>()
-    val topWords = mutableListOf<Pair<String, Int>>()
-    for (i in 1..20) topWords.add("" to 0)
     for (line in File(inputName).readLines()) {
         val words = line.toLowerCase().split(Regex("""[^a-zA-Zа-яА-ЯёЁ]+"""))
         for (word in words) if (word != "") countOfWords[word] = (countOfWords[word] ?: 0) + 1
     }
     if (countOfWords.isEmpty()) return mapOf()
-    for ((word, count) in countOfWords) {
-        for (i in 0..19) {
-            if (count >= topWords[i].second) {
-                topWords.add(i, Pair(word, count))
-                if (topWords.size > 20) topWords.removeAt(20)
-                break
-            }
-        }
-    }
-    while (topWords.last() == ("" to 0)) topWords.removeAt(topWords.lastIndex)
-    return topWords.toMap()
+    val topWords = countOfWords.toList().sortedBy { 0 - it.second }
+    return if (topWords.size > 20) topWords.subList(0, 20).toMap() else topWords.toMap()
 }
 
 /**
@@ -272,22 +255,15 @@ fun top20Words(inputName: String): Map<String, Int> {
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
+    val dictionaryLow = dictionary.map { it.key.toLowerCase() to it.value.toLowerCase() }.toMap()
     File(outputName).bufferedWriter().use {
-        var notFirstUse = false
-        for (line in File(inputName).readLines()) {
-            if (notFirstUse) it.newLine()
-            notFirstUse = true
-            for (char in line) {
-                if (dictionary[char.toLowerCase()] == null && dictionary[char.toUpperCase()] == null) {
-                    it.write(char.toString())
-                    continue
-                }
-                if (char in 'А'..'Я' || char in 'A'..'Z')
-                    it.write(
-                        (dictionary[char.toLowerCase()] ?: dictionary[char.toUpperCase()]!!).toLowerCase().capitalize()
-                    )
-                else it.write((dictionary[char.toLowerCase()] ?: dictionary[char.toUpperCase()]!!).toLowerCase())
+        for (char in File(inputName).readText()) {
+            if (dictionaryLow[char.toLowerCase()] == null) {
+                it.write(char.toString())
+                continue
             }
+            if (char in 'А'..'Я' || char in 'A'..'Z') it.write(dictionaryLow[char.toLowerCase()]!!.capitalize())
+            else it.write(dictionaryLow[char.toLowerCase()]!!)
         }
     }
 }
