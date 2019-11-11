@@ -176,7 +176,10 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     File(outputName).bufferedWriter().use {
         for (i in 0 until length.size) {
             it.write(lines[i][0])
-            if (lines[i].size < 2) continue
+            if (lines[i].size < 2) {
+                it.newLine()
+                continue
+            }
             val tabCount = lines[i].size - 1
             val tabBetween = (maxLength - length[i]) / tabCount
             val pointOfDiff = (maxLength - length[i]) % tabCount
