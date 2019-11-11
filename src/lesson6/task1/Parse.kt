@@ -82,8 +82,27 @@ fun dateStrToDigit(str: String): String {
     val num = parts[0].toIntOrNull()
     val year = parts[2].toIntOrNull()
     val month = months.indexOf(parts[1]) + 1
-    if (num ?: 0 in 1..lesson2.task2.daysInMonth(month, year ?: 0) && year != null)
-        return String.format("%02d.%02d.%d", num, month, year)
+    /*if (num ?: 0 in 1..lesson2.task2.daysInMonth(month, year ?: 0) && year != null)
+        return String.format("%02d.%02d.%d", num, month, year)*/
+    if (num ?: 0 > 0 && year != null) {
+        val correctDate = when (month) {
+            1 -> 31
+            3 -> 31
+            4 -> 30
+            5 -> 31
+            6 -> 30
+            7 -> 31
+            8 -> 31
+            9 -> 30
+            10 -> 31
+            11 -> 30
+            12 -> 31
+            2 -> if (year % 4 == 0 && year % 100 > 0 || year % 400 == 0) 29
+            else 28
+            else -> -1
+        }
+        if (correctDate >= num!!) return String.format("%02d.%02d.%d", num, month, year)
+    }
     return ""
 }
 
@@ -103,8 +122,27 @@ fun dateDigitToStr(digital: String): String {
     val num = parts[0].toIntOrNull()
     val month = parts[1].toIntOrNull()
     val year = parts[2].toIntOrNull()
-    if (num ?: 0 in 1..lesson2.task2.daysInMonth(month ?: 0, year ?: 0) && year != null)
-        return "$num ${months[month!! - 1]} $year"
+    /*if (num ?: 0 in 1..lesson2.task2.daysInMonth(month ?: 0, year ?: 0) && year != null)
+        return "$num ${months[month!! - 1]} $year"*/
+    if (num ?: 0 > 0 && month != null && year != null) {
+        val correctDate = when (month) {
+            1 -> 31
+            3 -> 31
+            4 -> 30
+            5 -> 31
+            6 -> 30
+            7 -> 31
+            8 -> 31
+            9 -> 30
+            10 -> 31
+            11 -> 30
+            12 -> 31
+            2 -> if (year % 4 == 0 && year % 100 > 0 || year % 400 == 0) 29
+            else 28
+            else -> -1
+        }
+        if (correctDate >= num!!) return "$num ${months[month - 1]} $year"
+    }
     return ""
 }
 
