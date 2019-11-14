@@ -221,8 +221,8 @@ fun top20Words(inputName: String): Map<String, Int> {
         for (word in words) if (word != "") countOfWords[word] = (countOfWords[word] ?: 0) + 1
     }
     if (countOfWords.isEmpty()) return mapOf()
-    val topWords = countOfWords.toList().sortedBy { 0 - it.second }
-    return if (topWords.size > 20) topWords.subList(0, 20).toMap() else topWords.toMap()
+    val topWords = countOfWords.toList().sortedBy { -it.second }
+    return topWords.take(20).toMap()
 }
 
 /**
@@ -264,12 +264,9 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
     val dictionaryLow = dictionary.map { it.key.toLowerCase() to it.value.toLowerCase() }.toMap()
     File(outputName).bufferedWriter().use {
         for (char in File(inputName).readText()) {
-            if (dictionaryLow[char.toLowerCase()] == null) {
-                it.write(char.toString())
-                continue
-            }
-            if (char.isUpperCase()) it.write(dictionaryLow[char.toLowerCase()]!!.capitalize())
-            else it.write(dictionaryLow[char.toLowerCase()]!!)
+            val d = dictionaryLow[char.toLowerCase()] ?: char.toString()
+            if (char.isUpperCase()) it.write(d.capitalize())
+            else it.write(d)
         }
     }
 }
