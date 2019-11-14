@@ -2,6 +2,7 @@
 
 package lesson7.task1
 
+import java.io.BufferedWriter
 import java.io.File
 import kotlin.math.max
 
@@ -359,8 +360,48 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  *
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
+
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    File(outputName).bufferedWriter().use {
+        it.write("<html><body><p>")
+        val file = File(inputName).readText()
+        val kindOfText = mutableListOf("", "")
+        var i = 0
+        val stringToHTML = mapOf("*" to ("<i>" to "</i>"), "**" to ("<b>" to "</b>"), "~~" to ("<s>" to "</s>"))
+        val length = file.length
+        fun openOrClose(string: String) {
+            if (kindOfText.last() == string) {
+                kindOfText.removeAt(kindOfText.lastIndex)
+                it.write(stringToHTML[string]!!.second)
+            } else {
+                kindOfText.add(string)
+                it.write(stringToHTML[string]!!.first)
+            }
+            i++
+        }
+        while (i in 0 until length - 1) {
+            if (i + 4 <= length) {
+                if (file.substring(i, i + 4) == "\r\n\r\n") {
+                    if (file.substring(i).contains(Regex("""[^\r\n]+"""))) {
+                        it.write("</p><p>")
+                        while (file.substring(i, i + 2) == "\r\n") i += 2
+                    } else i = length
+                }
+            }
+            val s = file.substring(i, i + 2)
+            when (s) {
+                "~~" -> openOrClose("~~")
+                "**" -> openOrClose("**")
+                else -> if (s.matches(Regex("""\*."""))) {
+                    openOrClose("*")
+                    i--
+                } else it.write(s.substring(0, 1))
+            }
+            i++
+        }
+        if (i == file.lastIndex)
+            it.write("</p></body></html>")
+    }
 }
 
 /**
