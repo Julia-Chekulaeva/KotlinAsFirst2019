@@ -62,12 +62,11 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
     for (line in File(inputName).readLines()) {
         val lowLine = line.toLowerCase()
         for (string in setOfStrings) {
-            val s = string.length
             val lowStr = string.toLowerCase()
-            val ind = lowLine.indexOf(lowStr)
-            if (ind == -1) continue
-            for (i in ind..line.length - s) {
-                if (lowLine.substring(i, i + s) == lowStr) res[string] = res[string]!! + 1
+            var ind = lowLine.indexOf(lowStr)
+            while (ind > -1) {
+                res[string] = res[string]!! + 1
+                ind = lowLine.indexOf(lowStr, ind + 1)
             }
         }
     }
@@ -363,11 +362,10 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     File(outputName).bufferedWriter().use {
         it.write("<html><body><p>")
-        val file = File(inputName).readText()
-        val kindOfText = mutableListOf("", "")
+        val file = File(inputName).readLines()
+        val kindOfText = mutableListOf("")
         var i = 0
         val stringToHTML = mapOf("*" to ("<i>" to "</i>"), "**" to ("<b>" to "</b>"), "~~" to ("<s>" to "</s>"))
-        val length = file.length
         fun openOrClose(string: String) {
             if (kindOfText.last() == string) {
                 kindOfText.removeAt(kindOfText.lastIndex)
@@ -378,28 +376,27 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             }
             i++
         }
-        while (i in 0 until length - 1) {
-            if (i + 4 <= length) {
-                if (file.substring(i, i + 4) == "\r\n\r\n") {
-                    if (file.substring(i).contains(Regex("""[^\r\n]+"""))) {
-                        it.write("</p><p>")
-                        while (file.substring(i, i + 2) == "\r\n") i += 2
-                    } else i = length
+        for ((index, line) in file.withIndex()) {
+            if (line.isEmpty()) continue
+            if (index > 0) if (file[index - 1].isEmpty()) it.write("</p><p>")
+            i = 0
+            while (i in 0 until line.length - 1) {
+                when (val s = line.substring(i, i + 2)) {
+                    "~~" -> openOrClose("~~")
+                    "**" -> openOrClose("**")
+                    else -> if (s.matches(Regex("""\*."""))) {
+                        openOrClose("*")
+                        i--
+                    } else it.write(s.substring(0, 1))
                 }
+                i++
             }
-            val s = file.substring(i, i + 2)
-            when (s) {
-                "~~" -> openOrClose("~~")
-                "**" -> openOrClose("**")
-                else -> if (s.matches(Regex("""\*."""))) {
-                    openOrClose("*")
-                    i--
-                } else it.write(s.substring(0, 1))
+            if (i == line.lastIndex) {
+                if (line.last() == '*') it.write("</s>")
+                else it.write(line.substring(i))
             }
-            i++
         }
-        if (i == file.lastIndex)
-            it.write("</p></body></html>")
+        it.write("</p></body></html>")
     }
 }
 
