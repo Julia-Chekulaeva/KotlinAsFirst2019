@@ -361,7 +361,6 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
 
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     File(outputName).bufferedWriter().use {
-
         it.write("<html><body><p>")
         val file = File(inputName).readLines()
         val kindOfText = mutableListOf("")
