@@ -376,15 +376,11 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             }
             i++
         }
-
-        var firstEmptyLine = true
-        for (line in file) {
-            if (line.isEmpty() && firstEmptyLine) {
-                it.write("</p><p>")
-                firstEmptyLine = false
-                continue
-            } else firstEmptyLine = true
-            //if (index > 0) if (file[index - 1].isEmpty()) it.write("</p><p>")
+        var notEmptyFile = false
+        for ((index, line) in file.withIndex()) {
+            if (line.isEmpty()) continue
+            if (index > 0 && notEmptyFile) if (file[index - 1].isEmpty()) it.write("</p><p>")
+            notEmptyFile = true
             i = 0
             while (i in 0 until line.length - 1) {
                 when (val s = line.substring(i, i + 2)) {
@@ -401,8 +397,10 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 if (line.last() == '*') {
                     openOrClose("*")
                     i--
-                } else it.write(line.substring(i))
+                }
+                else it.write(line.substring(i))
             }
+            it.newLine()
         }
         it.write("</p></body></html>")
     }
