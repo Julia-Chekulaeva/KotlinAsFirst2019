@@ -392,7 +392,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 i++
             }
             if (i == line.lastIndex) {
-                if (line.last() == '*') it.write("</s>")
+                if (line.last() == '*') it.write("</i>")
                 else it.write(line.substring(i))
             }
         }
