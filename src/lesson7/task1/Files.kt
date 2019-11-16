@@ -376,6 +376,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             }
             i++
         }
+
         var notEmptyFile = false
         for ((index, line) in file.withIndex()) {
             if (line.isEmpty()) continue
@@ -394,10 +395,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 i++
             }
             if (i == line.lastIndex) {
-                if (line.last() == '*') {
-                    openOrClose("*")
-                    i--
-                }
+                if (line.last() == '*') openOrClose("*")
                 else it.write(line.substring(i))
             }
             it.newLine()
@@ -506,7 +504,48 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlLists(inputName: String, outputName: String) {
-    TODO()
+    File(outputName).bufferedWriter().use {
+        val file = File(inputName).readLines()
+        it.write("<html><body>")
+        var spaces = -4
+        val kindOfList = mutableListOf<Char>()
+        val basicKinds = mapOf('.' to ("<ol>" to "</ol>"), '*' to ("<ul>" to "</ul>"))
+        for ((index, line) in file.withIndex()) {
+            if (!line.matches(Regex(""" *(\*|\d*\.).*"""))) {
+                while (kindOfList.isNotEmpty()) {
+                    it.write("</li>" + basicKinds[kindOfList.last()]!!.second)
+                    kindOfList.removeAt(kindOfList.lastIndex)
+                }
+                it.write(line)
+                it.newLine()
+                continue
+            }
+            var i = 0
+            while (line[i] == ' ') i++
+            val diff = (spaces - i) / 4
+            spaces = i
+            while (line[i] in '0'..'9') i++
+            if (diff == -1) {
+                it.write(basicKinds[line[i]]!!.first)
+                kindOfList.add(line[i])
+            } else for (j in 0 until diff) {
+                it.write("</li>" + basicKinds[kindOfList.last()]!!.second)
+                kindOfList.removeAt(kindOfList.lastIndex)
+            }
+            if (line[i] != kindOfList.last()) {
+                it.write("</li>" + basicKinds[kindOfList.last()]!!.second + basicKinds[line[i]]!!.first)
+                kindOfList[kindOfList.lastIndex] = line[i]
+            } else if (index > 0) if (file[index - 1].substring(spaces).matches(Regex(""" *(\*|\d*\.).*""")))
+                it.write("</li>")
+            it.write("<li>" + line.substring(i + 1))
+            it.newLine()
+        }
+        while (kindOfList.isNotEmpty()) {
+            it.write("</li>" + basicKinds[kindOfList.last()]!!.second)
+            kindOfList.removeAt(kindOfList.lastIndex)
+        }
+        it.write("</body></html>")
+    }
 }
 
 /**
