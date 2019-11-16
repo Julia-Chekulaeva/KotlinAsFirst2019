@@ -377,6 +377,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             i++
         }
         var notEmptyFile = false
+
         for ((index, line) in file.withIndex()) {
             if (line.isEmpty()) continue
             if (index > 0 && notEmptyFile) if (file[index - 1].isEmpty()) it.write("</p><p>")
