@@ -515,6 +515,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 fun mainBodyHTMLLists(inputName: String): List<String> {
     val file = File(inputName).readLines()
     val res = mutableListOf<String>()
+
     var spaces = -4
     val kindOfList = mutableListOf<Char>()
     val basicKinds = mapOf('.' to ("<ol>" to "</ol>"), '*' to ("<ul>" to "</ul>"))
