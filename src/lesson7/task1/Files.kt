@@ -575,15 +575,17 @@ fun markdownToHtmlLists(inputName: String, outputName: String) {
  *
  */
 fun markdownToHtml(inputName: String, outputName: String) {
-    val res = mainBodyHTMLSimple(mainBodyHTMLLists(inputName))
+    val textWithLists = mainBodyHTMLLists(inputName)
+    val hasEmptyLine = textWithLists.contains("")
+    val res = mainBodyHTMLSimple(textWithLists)
     File(outputName).bufferedWriter().use {
         it.write("<html><body>")
-        if (File(inputName).readLines().contains("")) it.write("<p>")
+        if (hasEmptyLine) it.write("<p>")
         for (line in res) {
             it.write(line)
             it.newLine()
         }
-        if (File(inputName).readLines().contains("")) it.write("</p>")
+        if (hasEmptyLine) it.write("</p>")
         it.write("</body></html>")
     }
 }
