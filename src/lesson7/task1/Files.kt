@@ -522,7 +522,7 @@ fun mainBodyHTMLLists(inputName: String): List<String> {
         res.add("")
         if (!line.matches(Regex(""" *(\*|\d*\.).*"""))) {
             while (kindOfList.isNotEmpty()) {
-                res[index] += "</li>" + basicKinds[kindOfList.last()]!!.second
+                res[index - 1] += "</li>" + basicKinds[kindOfList.last()]!!.second
                 kindOfList.removeAt(kindOfList.lastIndex)
             }
             res[index] += line
