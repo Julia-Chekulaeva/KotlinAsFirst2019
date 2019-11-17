@@ -361,11 +361,13 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
 
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     File(outputName).bufferedWriter().use {
-        it.write("<html><body><p>")
         val file = File(inputName).readLines()
+        it.write("<html><body>")
+        if (file.contains("")) it.write("<p>")
         val kindOfText = mutableListOf("")
         var i = 0
         val stringToHTML = mapOf("*" to ("<i>" to "</i>"), "**" to ("<b>" to "</b>"), "~~" to ("<s>" to "</s>"))
+        var notEmptyFile = false
         fun openOrClose(string: String) {
             if (kindOfText.last() == string) {
                 kindOfText.removeAt(kindOfText.lastIndex)
@@ -376,8 +378,6 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             }
             i++
         }
-
-        var notEmptyFile = false
         for ((index, line) in file.withIndex()) {
             if (line.isEmpty()) continue
             if (index > 0 && notEmptyFile) if (file[index - 1].isEmpty()) it.write("</p><p>")
@@ -400,7 +400,8 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             }
             it.newLine()
         }
-        it.write("</p></body></html>")
+        if (file.contains("")) it.write("</p>")
+        it.write("</body></html>")
     }
 }
 
@@ -503,10 +504,9 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 ///////////////////////////////конец файла//////////////////////////////////////////////////////////////////////////////
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
-fun markdownToHtmlLists(inputName: String, outputName: String) {
-    File(outputName).bufferedWriter().use {
+fun mainBodyHTMLLists(inputName: String, someFile: String) {
+    File(someFile).bufferedWriter().use {
         val file = File(inputName).readLines()
-        it.write("<html><body>")
         var spaces = -4
         val kindOfList = mutableListOf<Char>()
         val basicKinds = mapOf('.' to ("<ol>" to "</ol>"), '*' to ("<ul>" to "</ul>"))
@@ -544,6 +544,17 @@ fun markdownToHtmlLists(inputName: String, outputName: String) {
             it.write("</li>" + basicKinds[kindOfList.last()]!!.second)
             kindOfList.removeAt(kindOfList.lastIndex)
         }
+    }
+}
+
+fun markdownToHtmlLists(inputName: String, outputName: String) {
+    File(outputName).bufferedWriter().use {
+        it.write("<html><body>")
+        mainBodyHTMLLists(inputName, "input/newFile")
+        for (line in File("input/newFile").readLines()) {
+            it.write(line)
+            it.newLine()
+        }
         it.write("</body></html>")
     }
 }
@@ -557,7 +568,8 @@ fun markdownToHtmlLists(inputName: String, outputName: String) {
  *
  */
 fun markdownToHtml(inputName: String, outputName: String) {
-    TODO()
+    mainBodyHTMLLists(inputName, "input/newFile")
+    markdownToHtmlSimple("input/newFile", outputName)
 }
 
 /**
