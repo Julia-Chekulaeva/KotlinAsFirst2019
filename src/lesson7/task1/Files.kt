@@ -358,12 +358,11 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  *
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
-
-fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    File(outputName).bufferedWriter().use {
+fun mainBodyHTMLSimple(inputName: String, someFile: String) {
+    File(someFile).bufferedWriter().use {
         val file = File(inputName).readLines()
-        it.write("<html><body>")
-        if (file.contains("")) it.write("<p>")
+        /*it.write("<html><body>")
+        if (file.contains("")) it.write("<p>")*/
         val kindOfText = mutableListOf("")
         var i = 0
         val stringToHTML = mapOf("*" to ("<i>" to "</i>"), "**" to ("<b>" to "</b>"), "~~" to ("<s>" to "</s>"))
@@ -400,8 +399,19 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             }
             it.newLine()
         }
-        if (file.contains("")) it.write("</p>")
-        it.write("</body></html>")
+        /*if (file.contains("")) it.write("</p>")
+        it.write("</body></html>")*/
+    }
+}
+fun markdownToHtmlSimple(inputName: String, outputName: String) {
+    File(outputName).bufferedWriter().use {
+        it.write("<html><body><p>")
+        mainBodyHTMLSimple(inputName, "input/newFile")
+        for (line in File("input/newFile").readLines()) {
+            it.write(line)
+            it.newLine()
+        }
+        it.write("</p></body></html>")
     }
 }
 
@@ -569,7 +579,17 @@ fun markdownToHtmlLists(inputName: String, outputName: String) {
  */
 fun markdownToHtml(inputName: String, outputName: String) {
     mainBodyHTMLLists(inputName, "input/newFile")
-    markdownToHtmlSimple("input/newFile", outputName)
+    mainBodyHTMLSimple("input/newFile", "input/anotherNewFile")
+    File(outputName).bufferedWriter().use {
+        it.write("<html><body>")
+        if (File(inputName).readLines().contains("")) it.write("<p>")
+        for (line in File("input/anotherNewFile").readLines()) {
+            it.write(line)
+            it.newLine()
+        }
+        if (File(inputName).readLines().contains("")) it.write("</p>")
+        it.write("</body></html>")
+    }
 }
 
 /**
