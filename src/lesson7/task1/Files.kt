@@ -358,56 +358,54 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  *
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
-fun mainBodyHTMLSimple(inputName: String, someFile: String) {
-    File(someFile).bufferedWriter().use {
-        val file = File(inputName).readLines()
-        /*it.write("<html><body>")
-        if (file.contains("")) it.write("<p>")*/
-        val kindOfText = mutableListOf("")
-        var i = 0
-        val stringToHTML = mapOf("*" to ("<i>" to "</i>"), "**" to ("<b>" to "</b>"), "~~" to ("<s>" to "</s>"))
-        var notEmptyFile = false
-        fun openOrClose(string: String) {
-            if (kindOfText.last() == string) {
-                kindOfText.removeAt(kindOfText.lastIndex)
-                it.write(stringToHTML[string]!!.second)
-            } else {
-                kindOfText.add(string)
-                it.write(stringToHTML[string]!!.first)
+fun mainBodyHTMLSimple(inputText: List<String>): List<String> {
+    val res = mutableListOf<String>()
+    val kindOfText = mutableListOf("")
+    var i = 0
+    var j = 0
+    val stringToHTML = mapOf("*" to ("<i>" to "</i>"), "**" to ("<b>" to "</b>"), "~~" to ("<s>" to "</s>"))
+    var notEmptyFile = false
+    fun openOrClose(string: String) {
+        if (kindOfText.last() == string) {
+            kindOfText.removeAt(kindOfText.lastIndex)
+            res[j] += stringToHTML[string]!!.second
+        } else {
+            kindOfText.add(string)
+            res[j] += stringToHTML[string]!!.first
+        }
+        i++
+    }
+    for ((index, line) in inputText.withIndex()) {
+        if (line.isEmpty()) continue
+        res.add("")
+        if (index > 0 && notEmptyFile) if (inputText[index - 1].isEmpty()) res[j] += "</p><p>"
+        notEmptyFile = true
+        i = 0
+        while (i in 0 until line.length - 1) {
+            when (val s = line.substring(i, i + 2)) {
+                "~~" -> openOrClose("~~")
+                "**" -> openOrClose("**")
+                else -> if (s.matches(Regex("""\*."""))) {
+                    openOrClose("*")
+                    i--
+                } else res[j] += s.substring(0, 1)
             }
             i++
         }
-        for ((index, line) in file.withIndex()) {
-            if (line.isEmpty()) continue
-            if (index > 0 && notEmptyFile) if (file[index - 1].isEmpty()) it.write("</p><p>")
-            notEmptyFile = true
-            i = 0
-            while (i in 0 until line.length - 1) {
-                when (val s = line.substring(i, i + 2)) {
-                    "~~" -> openOrClose("~~")
-                    "**" -> openOrClose("**")
-                    else -> if (s.matches(Regex("""\*."""))) {
-                        openOrClose("*")
-                        i--
-                    } else it.write(s.substring(0, 1))
-                }
-                i++
-            }
-            if (i == line.lastIndex) {
-                if (line.last() == '*') openOrClose("*")
-                else it.write(line.substring(i))
-            }
-            it.newLine()
+        if (i == line.lastIndex) {
+            if (line.last() == '*') openOrClose("*")
+            else res[j] += line.substring(i)
         }
-        /*if (file.contains("")) it.write("</p>")
-        it.write("</body></html>")*/
+        j++
     }
+    return res
 }
+
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     File(outputName).bufferedWriter().use {
         it.write("<html><body><p>")
-        mainBodyHTMLSimple(inputName, "input/newFile")
-        for (line in File("input/newFile").readLines()) {
+        val text = mainBodyHTMLSimple(File(inputName).readLines())
+        for (line in text) {
             it.write(line)
             it.newLine()
         }
@@ -514,54 +512,53 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 ///////////////////////////////конец файла//////////////////////////////////////////////////////////////////////////////
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
-fun mainBodyHTMLLists(inputName: String, someFile: String) {
-    File(someFile).bufferedWriter().use {
-        val file = File(inputName).readLines()
-        var spaces = -4
-        val kindOfList = mutableListOf<Char>()
-        val basicKinds = mapOf('.' to ("<ol>" to "</ol>"), '*' to ("<ul>" to "</ul>"))
-        for ((index, line) in file.withIndex()) {
-            if (!line.matches(Regex(""" *(\*|\d*\.).*"""))) {
-                while (kindOfList.isNotEmpty()) {
-                    it.write("</li>" + basicKinds[kindOfList.last()]!!.second)
-                    kindOfList.removeAt(kindOfList.lastIndex)
-                }
-                it.write(line)
-                it.newLine()
-                continue
-            }
-            var i = 0
-            while (line[i] == ' ') i++
-            val diff = (spaces - i) / 4
-            spaces = i
-            while (line[i] in '0'..'9') i++
-            if (diff == -1) {
-                it.write(basicKinds[line[i]]!!.first)
-                kindOfList.add(line[i])
-            } else for (j in 0 until diff) {
-                it.write("</li>" + basicKinds[kindOfList.last()]!!.second)
+fun mainBodyHTMLLists(inputName: String): List<String> {
+    val file = File(inputName).readLines()
+    val res = mutableListOf<String>()
+    var spaces = -4
+    val kindOfList = mutableListOf<Char>()
+    val basicKinds = mapOf('.' to ("<ol>" to "</ol>"), '*' to ("<ul>" to "</ul>"))
+    for ((index, line) in file.withIndex()) {
+        res.add("")
+        if (!line.matches(Regex(""" *(\*|\d*\.).*"""))) {
+            while (kindOfList.isNotEmpty()) {
+                res[index] += "</li>" + basicKinds[kindOfList.last()]!!.second
                 kindOfList.removeAt(kindOfList.lastIndex)
             }
-            if (line[i] != kindOfList.last()) {
-                it.write("</li>" + basicKinds[kindOfList.last()]!!.second + basicKinds[line[i]]!!.first)
-                kindOfList[kindOfList.lastIndex] = line[i]
-            } else if (index > 0) if (file[index - 1].substring(spaces).matches(Regex(""" *(\*|\d*\.).*""")))
-                it.write("</li>")
-            it.write("<li>" + line.substring(i + 1))
-            it.newLine()
+            res[index] += line
+            continue
         }
-        while (kindOfList.isNotEmpty()) {
-            it.write("</li>" + basicKinds[kindOfList.last()]!!.second)
+        var i = 0
+        while (line[i] == ' ') i++
+        val diff = (spaces - i) / 4
+        spaces = i
+        while (line[i] in '0'..'9') i++
+        if (diff == -1) {
+            res[index] += basicKinds[line[i]]!!.first
+            kindOfList.add(line[i])
+        } else for (j in 0 until diff) {
+            res[index] += "</li>" + basicKinds[kindOfList.last()]!!.second
             kindOfList.removeAt(kindOfList.lastIndex)
         }
+        if (line[i] != kindOfList.last()) {
+            res[index] += "</li>" + basicKinds[kindOfList.last()]!!.second + basicKinds[line[i]]!!.first
+            kindOfList[kindOfList.lastIndex] = line[i]
+        } else if (index > 0) if (file[index - 1].substring(spaces).matches(Regex(""" *(\*|\d*\.).*""")))
+            res[index] += "</li>"
+        res[index] += "<li>" + line.substring(i + 1)
     }
+    while (kindOfList.isNotEmpty()) {
+        res[res.size - 1] += "</li>" + basicKinds[kindOfList.last()]!!.second
+        kindOfList.removeAt(kindOfList.lastIndex)
+    }
+    return res
 }
 
 fun markdownToHtmlLists(inputName: String, outputName: String) {
     File(outputName).bufferedWriter().use {
         it.write("<html><body>")
-        mainBodyHTMLLists(inputName, "input/newFile")
-        for (line in File("input/newFile").readLines()) {
+        val list = mainBodyHTMLLists(inputName)
+        for (line in list) {
             it.write(line)
             it.newLine()
         }
@@ -578,12 +575,11 @@ fun markdownToHtmlLists(inputName: String, outputName: String) {
  *
  */
 fun markdownToHtml(inputName: String, outputName: String) {
-    mainBodyHTMLLists(inputName, "input/newFile")
-    mainBodyHTMLSimple("input/newFile", "input/anotherNewFile")
+    val res = mainBodyHTMLSimple(mainBodyHTMLLists(inputName))
     File(outputName).bufferedWriter().use {
         it.write("<html><body>")
         if (File(inputName).readLines().contains("")) it.write("<p>")
-        for (line in File("input/anotherNewFile").readLines()) {
+        for (line in res) {
             it.write(line)
             it.newLine()
         }
