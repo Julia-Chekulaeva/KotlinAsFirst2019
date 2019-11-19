@@ -517,6 +517,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun mainBodyHTMLLists(inputName: String): List<String> {
+
     val file = File(inputName).readLines()
     val res = mutableListOf<String>()
     var spaces = -4
