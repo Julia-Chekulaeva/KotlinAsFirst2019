@@ -4,6 +4,7 @@ package lesson7.task1
 
 import java.io.BufferedWriter
 import java.io.File
+import java.util.*
 import kotlin.math.max
 
 /**
@@ -269,6 +270,9 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
         }
     }
 }
+fun main() {
+    markdownToHtml("input/newFile", "input/anotherNewFile")
+}
 
 /**
  * Средняя
@@ -526,6 +530,7 @@ fun mainBodyHTMLLists(inputName: String): List<String> {
                 kindOfList.removeAt(kindOfList.lastIndex)
             }
             res[index] += line
+            spaces = -4
             continue
         }
         var i = 0
