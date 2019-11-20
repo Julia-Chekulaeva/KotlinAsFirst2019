@@ -207,7 +207,7 @@ fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> {
     for ((i, circle) in list.withIndex()) {
         for (j in 0 until i) {
             val a = circle.distance(list[j])
-            if (dist == null || a <= dist!!) {
+            if (dist == null || a <= dist) {
                 dist = a
                 res = circle to list[j]
             }
@@ -242,6 +242,8 @@ fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
  * соединяющий две самые удалённые точки в данном множестве.
  */
 fun minContainingCircle(vararg points: Point): Circle {
+    if (points.isEmpty()) throw IllegalArgumentException()
+    if (points.size == 1) return Circle(points[0], 0.0)
     val diameter = diameter(*points)
     var circle = circleByDiameter(diameter)
     for (point in points) if (!circleByDiameter(diameter).contains(point)) {
