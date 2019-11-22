@@ -85,7 +85,7 @@ data class Circle(val center: Point, val radius: Double) {
      * Вернуть true, если и только если окружность содержит данную точку НА себе или ВНУТРИ себя
      */
 
-    fun contains(p: Point): Boolean = center.distance(p) <= radius
+    fun contains(p: Point): Boolean = center.distance(p) <= radius + 0.000000000000001
 }
 
 /**
@@ -156,7 +156,7 @@ class Line private constructor(val b: Double, val angle: Double) {
      */
     fun crossPoint(other: Line): Point {
         val x = (b / cos(angle) - other.b / cos(other.angle)) / (tan(other.angle) - tan(angle))
-        val y = if (cos(angle) < 0.5 && cos(angle) > -0.5) (x * sin(other.angle) + other.b) / cos(other.angle)
+        val y = if (abs(angle - PI / 2) < abs(other.angle - PI / 2)) (x * sin(other.angle) + other.b) / cos(other.angle)
         else (x * sin(angle) + b) / cos(angle)
         return Point(x, y)
     }
@@ -202,12 +202,12 @@ fun bisectorByPoints(a: Point, b: Point): Line = Line(middle(a, b), (lineByPoint
 fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> {
     if (circles.size < 2) throw IllegalArgumentException()
     var res: Pair<Circle, Circle>? = null
-    var dist: Double? = null
+    var dist: Double = Double.POSITIVE_INFINITY
     val list = circles.reversed()
     for ((i, circle) in list.withIndex()) {
         for (j in 0 until i) {
             val a = circle.distance(list[j])
-            if (dist == null || a <= dist) {
+            if (a <= dist) {
                 dist = a
                 res = circle to list[j]
             }
@@ -242,13 +242,37 @@ fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
  * соединяющий две самые удалённые точки в данном множестве.
  */
 fun minContainingCircle(vararg points: Point): Circle {
-    if (points.isEmpty()) throw IllegalArgumentException()
-    if (points.size == 1) return Circle(points[0], 0.0)
+    val size = points.size
+    if (size == 0) throw IllegalArgumentException()
+    if (size == 1) return Circle(points[0], 0.0)
     val diameter = diameter(*points)
-    var circle = circleByDiameter(diameter)
-    for (point in points) if (!circleByDiameter(diameter).contains(point)) {
-        circle = circleByThreePoints(diameter.begin, diameter.end, point)
+    val circle = circleByDiameter(diameter)
+    var twoPoints = true
+    for (point in points) {
+        if (!circle.contains(point)) {
+            twoPoints = false
+            break
+        }
     }
-    return circle
+    if (twoPoints) return circle
+    val r = diameter.begin.distance(diameter.end) / 2
+    var circle2: Circle? = null
+    for ((index, point) in points.withIndex()) {
+        for (i in (index + 1) until size) {
+            for (j in (i + 1) until size) {
+                val a = circle2
+                circle2 = circleByThreePoints(point, points[i], points[j])
+                if (circle2.radius > r && circle2.radius <= (a ?: circle2).radius) {
+                    for (point2 in points) {
+                        if (!circle2!!.contains(point2)) {
+                            circle2 = a
+                            break
+                        }
+                    }
+                } else circle2 = a
+            }
+        }
+    }
+    return circle2!!
 }
 
