@@ -5,6 +5,7 @@ package lesson8.task2
 import lesson4.task1.abs
 import java.lang.IllegalArgumentException
 import kotlin.math.max
+import kotlin.math.min
 
 /**
  * Клетка шахматной доски. Шахматная доска квадратная и имеет 8 х 8 клеток.
@@ -203,7 +204,25 @@ fun kingMoveNumber(start: Square, end: Square): Int {
  *          kingTrajectory(Square(3, 5), Square(6, 2)) = listOf(Square(3, 5), Square(4, 4), Square(5, 3), Square(6, 2))
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
-fun kingTrajectory(start: Square, end: Square): List<Square> = TODO()
+fun kingTrajectory(start: Square, end: Square): List<Square> {
+    val way = mutableListOf<Square>()
+    val startRow = start.row
+    val startColumn = start.column
+    val turnPoint = min(columnDiff(start, end), rowDiff(start, end))
+    val endPoint = kingMoveNumber(start, end)
+    val rowDirest = if (startRow < end.row) 1 else -1
+    val columnDirest = if (startColumn < end.column) 1 else -1
+    for (i in 0 until turnPoint)
+        way.add(Square(startColumn + i * columnDirest, startRow + i * rowDirest))
+    val turnColumn = startColumn + turnPoint * columnDirest
+    if (turnColumn == end.column) for (i in turnPoint..endPoint)
+        way.add(Square(turnColumn, startRow + i * rowDirest))
+    else {
+        val turnRow = startRow + turnPoint * rowDirest
+        for (i in turnPoint..endPoint) way.add(Square(startColumn + i * columnDirest, turnRow))
+    }
+    return way
+}
 
 /**
  * Сложная
