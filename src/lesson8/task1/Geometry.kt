@@ -184,7 +184,8 @@ fun lineBySegment(s: Segment): Line = lineByPoints(s.begin, s.end)
  *
  * Построить прямую по двум точкам
  */
-fun lineByPoints(a: Point, b: Point): Line = Line(a, (PI + atan((a.y - b.y) / (a.x - b.x))) % PI)
+fun lineByPoints(a: Point, b: Point): Line = if (a.x - b.x == 0.0) Line(a, PI / 2)
+else Line(a, (PI + atan((a.y - b.y) / (a.x - b.x))) % PI)
 
 /**
  * Сложная
@@ -242,7 +243,6 @@ fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
  * соединяющий две самые удалённые точки в данном множестве.
  */
 fun minContainingCircle(vararg points: Point): Circle {
-    TODO()
     val size = points.size
     if (size == 0) throw IllegalArgumentException()
     if (size == 1) return Circle(points[0], 0.0)

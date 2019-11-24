@@ -29,6 +29,8 @@ data class Square(val column: Int, val row: Int) {
      */
     fun notation(): String = if (inside()) ('a' + column - 1).toString() + "$row"
     else ""
+
+    fun cornerSquare(): Boolean = (column == 1 || column == 8) && (row == 1 || row == 8)
 }
 
 /**
@@ -116,6 +118,7 @@ fun rookTrajectory(start: Square, end: Square): List<Square> = when (rookMoveNum
  * Слон может пройти через клетку (6, 4) к клетке (3, 7).
  */
 fun rowDiff(start: Square, end: Square) = kotlin.math.abs(start.row - end.row)
+
 fun columnDiff(start: Square, end: Square) = kotlin.math.abs(start.column - end.column)
 fun bishopMoveNumber(start: Square, end: Square): Int {
     val column = columnDiff(start, end)
@@ -247,7 +250,30 @@ fun kingTrajectory(start: Square, end: Square): List<Square> {
  * Пример: knightMoveNumber(Square(3, 1), Square(6, 3)) = 3.
  * Конь может последовательно пройти через клетки (5, 2) и (4, 4) к клетке (6, 3).
  */
-fun knightMoveNumber(start: Square, end: Square): Int = TODO()
+fun knightMoveNumber(start: Square, end: Square): Int {
+    if (!start.inside() || !end.inside()) throw IllegalArgumentException()
+    val rowDiff = rowDiff(start, end)
+    val columnDiff = columnDiff(start, end)
+    if (rowDiff > 4 || columnDiff > 4) {
+        val rowDirect = if (start.row < end.row || end.row == 8) 1 else -1
+        val columnDirect = if (start.column < end.column || end.column == 8) 1 else -1
+        val square1 = Square(end.column - columnDirect, end.row - rowDirect * 2)
+        val square2 = Square(end.column - columnDirect * 2, end.row - rowDirect)
+        return when {
+            !square1.inside() -> 1 + knightMoveNumber(start, square2)
+            !square2.inside() -> 1 + knightMoveNumber(start, square1)
+            else -> 1 + max(knightMoveNumber(start, square1), knightMoveNumber(start, square2))
+        }
+    }
+    return if (rowDiff % 2 == columnDiff % 2) {
+        if (columnDiff % 2 == 0 || (columnDiff == 1 && rowDiff == 1 &&
+                    (start.cornerSquare() || end.cornerSquare()))
+        ) {
+            if (start == end) 0 else 4
+        } else 2
+    } else if ((columnDiff == 1 && rowDiff == 2) || (columnDiff == 2 && rowDiff == 1)) 1
+    else 3
+}
 
 /**
  * Очень сложная
