@@ -266,8 +266,8 @@ fun knightMoveNumber(start: Square, end: Square): Int {
         }
     }
     return if (rowDiff % 2 == columnDiff % 2) {
-        if (columnDiff % 2 == 0 || (columnDiff == 1 && rowDiff == 1 &&
-                    (start.cornerSquare() || end.cornerSquare()))
+        if (columnDiff == rowDiff && (columnDiff % 2 == 0 || (columnDiff == 1 &&
+                    (start.cornerSquare() || end.cornerSquare())))
         ) {
             if (start == end) 0 else 4
         } else 2
