@@ -513,9 +513,6 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 ///////////////////////////////конец файла//////////////////////////////////////////////////////////////////////////////
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
-fun main() {
-    if (Regex(""".*\(\d+\)""").matches("07(67)j")) println(1)
-}
 fun mainBodyHTMLLists(inputName: String): List<String> {
     val file = File(inputName).readLines()
     val res = mutableListOf<String>()

@@ -262,7 +262,7 @@ fun knightMoveNumber(start: Square, end: Square): Int {
         return when {
             !square1.inside() -> 1 + knightMoveNumber(start, square2)
             !square2.inside() -> 1 + knightMoveNumber(start, square1)
-            else -> 1 + max(knightMoveNumber(start, square1), knightMoveNumber(start, square2))
+            else -> 1 + min(knightMoveNumber(start, square1), knightMoveNumber(start, square2))
         }
     }
     return if (rowDiff % 2 == columnDiff % 2) {
