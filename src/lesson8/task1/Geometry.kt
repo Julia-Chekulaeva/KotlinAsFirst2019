@@ -85,7 +85,7 @@ data class Circle(val center: Point, val radius: Double) {
      * Вернуть true, если и только если окружность содержит данную точку НА себе или ВНУТРИ себя
      */
 
-    fun contains(p: Point): Boolean = center.distance(p) <= radius
+    fun contains(p: Point): Boolean = center.distance(p) <= radius + 10000 * Math.ulp(radius)
 }
 
 /**
@@ -184,8 +184,7 @@ fun lineBySegment(s: Segment): Line = lineByPoints(s.begin, s.end)
  *
  * Построить прямую по двум точкам
  */
-fun lineByPoints(a: Point, b: Point): Line = if (a.x - b.x == 0.0) Line(a, PI / 2)
-else Line(a, (PI + atan((a.y - b.y) / (a.x - b.x))) % PI)
+fun lineByPoints(a: Point, b: Point): Line = Line(a, (PI + atan2((a.y - b.y), (a.x - b.x))) % PI)
 
 /**
  * Сложная
@@ -247,8 +246,7 @@ fun minContainingCircle(vararg points: Point): Circle {
     if (size == 0) throw IllegalArgumentException()
     if (size == 1) return Circle(points[0], 0.0)
     val diameter = diameter(*points)
-    val c = circleByDiameter(diameter)
-    val circle = Circle(c.center, c.radius + 10000 * Math.ulp(c.radius))
+    val circle = circleByDiameter(diameter)
     var twoPoints = true
     for (point in points.filter { it != diameter.begin && it != diameter.end }) {
         if (!circle.contains(point)) {
@@ -262,8 +260,7 @@ fun minContainingCircle(vararg points: Point): Circle {
     for ((index, point) in points.withIndex()) {
         for (i in (index + 1) until size) {
             for (j in (i + 1) until size) {
-                val s = circleByThreePoints(point, points[i], points[j])
-                val a = Circle(s.center, s.radius + 10000 * Math.ulp(s.radius))
+                val a = circleByThreePoints(point, points[i], points[j])
                 if (a.radius > r && a.radius <= (circle2 ?: a).radius) {
                     if (points.filter { it != point && it != points[i] && it != points[j] }.all { a.contains(it) })
                         circle2 = a

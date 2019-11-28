@@ -6,6 +6,7 @@ import lesson4.task1.abs
 import java.lang.IllegalArgumentException
 import kotlin.math.max
 import kotlin.math.min
+import lesson8.task3.Graph
 
 /**
  * Клетка шахматной доски. Шахматная доска квадратная и имеет 8 х 8 клеток.
@@ -32,6 +33,8 @@ data class Square(val column: Int, val row: Int) {
 
     fun cornerSquare(): Boolean = (column == 1 || column == 8) && (row == 1 || row == 8)
 }
+
+fun toSquare(s: String) = Square(s[0] - 'a' + 1, s[1] - '0')
 
 /**
  * Простая
@@ -120,6 +123,7 @@ fun rookTrajectory(start: Square, end: Square): List<Square> = when (rookMoveNum
 fun rowDiff(start: Square, end: Square) = kotlin.math.abs(start.row - end.row)
 
 fun columnDiff(start: Square, end: Square) = kotlin.math.abs(start.column - end.column)
+
 fun bishopMoveNumber(start: Square, end: Square): Int {
     val column = columnDiff(start, end)
     val row = rowDiff(start, end)
@@ -295,4 +299,24 @@ fun knightMoveNumber(start: Square, end: Square): Int {
  *
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
-fun knightTrajectory(start: Square, end: Square): List<Square> = TODO()
+
+fun knightTrajectory(start: Square, end: Square): List<Square> {
+    TODO()
+    val g = Graph()
+    val list = listOf(1 to 2, 1 to -2, 2 to 1, 2 to -1)
+    for (i in 1..8) {
+        for (j in 1..8) {
+            val top1 = Square(i, j).notation()
+            g.addVertex(top1)
+            for ((c, r) in list) {
+                val s = Square(i + c, j + r)
+                if (!s.inside()) continue
+                val top2 = s.notation()
+                g.addVertex(top2)
+                g.connect(top1, top2)
+            }
+        }
+    }
+    //println(102132435465)
+    return g.minWay(start.notation(), end.notation()).map { toSquare(it) }
+}
