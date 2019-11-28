@@ -28,7 +28,7 @@ class Graph {
         val res = mutableMapOf(first to listOf(first))
         val used = mutableSetOf(first)
         val lastUsed = used
-        for (i in 1..vertices.size) {
+        while (true) {
             val lastUsedForLoop = lastUsed.toSet()
             used.addAll(lastUsed)
             lastUsed.clear()
@@ -39,11 +39,9 @@ class Graph {
                 for (next2 in neighbors) {
                     lastUsed.add(next2)
                     res[next2] = res[next1]!! + next2
-                    if (next2 == second) return res[next2]!!
                 }
             }
         }
-        return res[second] ?: emptyList()
     }
 
     /**
