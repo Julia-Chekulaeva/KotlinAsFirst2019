@@ -301,9 +301,8 @@ fun knightMoveNumber(start: Square, end: Square): Int {
  */
 
 fun knightTrajectory(start: Square, end: Square): List<Square> {
-    TODO()
     val g = Graph()
-    val list = listOf(1 to 2, 1 to -2, 2 to 1, 2 to -1)
+    val list = listOf(1 to 2, 1 to -2, 2 to 1, 2 to -1, -1 to 2, -1 to -2, -2 to 1, -2 to -1)
     for (i in 1..8) {
         for (j in 1..8) {
             val top1 = Square(i, j).notation()
@@ -312,11 +311,10 @@ fun knightTrajectory(start: Square, end: Square): List<Square> {
                 val s = Square(i + c, j + r)
                 if (!s.inside()) continue
                 val top2 = s.notation()
-                g.addVertex(top2)
+                if (!g.contains(top2)) g.addVertex(top2)
                 g.connect(top1, top2)
             }
         }
     }
-    //println(102132435465)
     return g.minWay(start.notation(), end.notation()).map { toSquare(it) }
 }

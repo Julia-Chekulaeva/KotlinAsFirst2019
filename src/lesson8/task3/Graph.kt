@@ -22,30 +22,28 @@ class Graph {
 
     fun connect(first: String, second: String) = connect(this[first], this[second])
 
+    fun contains(name: String) = name in vertices.keys
+
     fun minWay(first: String, second: String): List<String> {
-        var next1 = first
-        val res = mutableMapOf(next1 to listOf(next1))
-        val used = mutableSetOf(next1 to vertices[next1]!!)
-        val reverseVertices = vertices.map { it.value to it.key }.toMap()
-        var used2 = used
-        while (next1 != second) {
-            println(res)
-            val lastUsed = used2
+        val res = mutableMapOf(first to listOf(first))
+        val used = mutableSetOf(first)
+        val lastUsed = used
+        for (i in 1..vertices.size) {
+            val lastUsedForLoop = lastUsed.toSet()
             used.addAll(lastUsed)
-            used2 = mutableSetOf()
-            for (elem in lastUsed) {
-                next1 = elem.first
-                val top1 = vertices[next1]!!
-                val usedVertex = used.map { it.second }
-                for (top2 in top1.neighbors.filter { it !in usedVertex }) {
-                    val next2 = reverseVertices[top2]!!
-                    used2.add(next2 to top2)
+            lastUsed.clear()
+            for (elem in lastUsedForLoop) {
+                val next1 = elem
+                if (next1 == second) return res[next1]!!
+                val neighbors = vertices[next1]!!.neighbors.map { it.name }.filter { it !in used }
+                for (next2 in neighbors) {
+                    lastUsed.add(next2)
                     res[next2] = res[next1]!! + next2
                     if (next2 == second) return res[next2]!!
                 }
             }
         }
-        return res[next1]!!
+        return res[second] ?: emptyList()
     }
 
     /**
