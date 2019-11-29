@@ -112,7 +112,7 @@ fun diameter(vararg points: Point): Segment {
     for ((i, point) in points.withIndex()) {
         for (j in 0 until i) {
             val a = point.distance(points[j])
-            if (a > dist) {
+            if (a >= dist) {
                 dist = a
                 res = Segment(point, points[j])
             }
