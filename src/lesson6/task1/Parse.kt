@@ -185,7 +185,7 @@ fun bestHighJump(jumps: String): Int {
  */
 
 fun plusMinus(expression: String): Int {
-    //if (!expression.matches(Regex("""([1-9]\d*|0)( (\+|-) ([1-9]\d*|0))*""")))
+    if (!expression.matches(Regex("""([1-9]\d*|0)( (\+|-) ([1-9]\d*|0))*""")))
         throw IllegalArgumentException()
     println()
     val counter = expression.split(" ")
