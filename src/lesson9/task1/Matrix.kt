@@ -2,6 +2,10 @@
 
 package lesson9.task1
 
+import java.lang.IllegalArgumentException
+import java.lang.IndexOutOfBoundsException
+import java.lang.StringBuilder
+
 /**
  * Ячейка матрицы: row = ряд, column = колонка
  */
@@ -41,32 +45,50 @@ interface Matrix<E> {
  * height = высота, width = ширина, e = чем заполнить элементы.
  * Бросить исключение IllegalArgumentException, если height или width <= 0.
  */
-fun <E> createMatrix(height: Int, width: Int, e: E): Matrix<E> = TODO()
+fun <E> createMatrix(height: Int, width: Int, e: E): Matrix<E> {
+    if (height <= 0 || width <= 0) throw IllegalArgumentException()
+    val result = MatrixImpl<E>(height, width)
+    for (i in 0 until height)
+        for (j in 0 until width)
+            result[i, j] = e
+    return result
+}
 
 /**
  * Средняя сложность
  *
  * Реализация интерфейса "матрица"
  */
-class MatrixImpl<E> : Matrix<E> {
-    override val height: Int = TODO()
+class MatrixImpl<E>(override val height: Int, override val width: Int) : Matrix<E> {
 
-    override val width: Int = TODO()
+    private val list = MutableList<E?>(height * width) { null }
 
-    override fun get(row: Int, column: Int): E = TODO()
+    override fun get(row: Int, column: Int): E = list[row * width + column] ?: throw IndexOutOfBoundsException()
 
-    override fun get(cell: Cell): E = TODO()
+    override fun get(cell: Cell): E = get(cell.row, cell.column)
 
     override fun set(row: Int, column: Int, value: E) {
-        TODO()
+        list[row * width + column] = value
     }
 
     override fun set(cell: Cell, value: E) {
-        TODO()
+        set(cell.row, cell.column, value)
     }
 
-    override fun equals(other: Any?) = TODO()
+    override fun equals(other: Any?): Boolean {
 
-    override fun toString(): String = TODO()
+        return other is MatrixImpl<*> &&
+                height == other.height && width == other.width &&
+                list.all {
+                    it == other[list.indexOf(it) / width, list.indexOf(it) % height]
+                }
+    }
+
+    override fun toString(): String = buildString {
+        append('[')
+        for (i in 0 until height) append("[${list.subList(i * width, (i + 1) * width )}], ")
+        delete(length - 2, length)
+        append(']')
+    }
 }
 
