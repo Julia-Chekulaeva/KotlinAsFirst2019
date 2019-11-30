@@ -75,20 +75,31 @@ class MatrixImpl<E>(override val height: Int, override val width: Int) : Matrix<
         set(cell.row, cell.column, value)
     }
 
-    override fun equals(other: Any?): Boolean {
-
-        return other is MatrixImpl<*> &&
-                height == other.height && width == other.width &&
-                list.all {
-                    it == other[list.indexOf(it) / width, list.indexOf(it) % height]
-                }
-    }
-
     override fun toString(): String = buildString {
         append('[')
-        for (i in 0 until height) append("[${list.subList(i * width, (i + 1) * width )}], ")
+        for (i in 0 until height) append("${list.subList(i * width, (i + 1) * width)}, ")
         delete(length - 2, length)
         append(']')
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as MatrixImpl<*>
+
+        if (height != other.height) return false
+        if (width != other.width) return false
+        if (list != other.list) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = height
+        result = 31 * result + width
+        result = 31 * result + list.hashCode()
+        return result
     }
 }
 
