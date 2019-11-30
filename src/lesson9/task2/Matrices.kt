@@ -310,12 +310,19 @@ operator fun Matrix<Int>.times(other: Matrix<Int>): Matrix<Int> = TODO(this.toSt
  * 0  4 13  6
  * 3 10 11  8
  */
+fun cellOf(matrix: Matrix<Int>, elem: Int): Cell {
+    for (i in 0 until matrix.height)
+        for (j in 0 until matrix.width)
+            if (matrix[i, j] == elem) return Cell(i, j)
+    return Cell(-1, -1)
+}
+
 fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
-    var cellOfZero = matrix.cellOf(0)
+    var cellOfZero = cellOf(matrix, 0)
     var row = cellOfZero.row
     var column = cellOfZero.column
     for (move in moves) {
-        val cellOfElem = matrix.cellOf(move)
+        val cellOfElem = cellOf(matrix, move)
         if (abs(cellOfElem.row - row) + abs(cellOfElem.column - column) > 1) throw IllegalStateException()
         matrix[row, column] = move
         row = cellOfElem.row
