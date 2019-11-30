@@ -36,6 +36,8 @@ interface Matrix<E> {
     operator fun set(row: Int, column: Int, value: E)
 
     operator fun set(cell: Cell, value: E)
+
+    fun cellOf(elem: E): Cell
 }
 
 /**
@@ -67,6 +69,8 @@ class MatrixImpl<E>(override val height: Int, override val width: Int) : Matrix<
     else throw IndexOutOfBoundsException()
 
     override fun get(cell: Cell): E = get(cell.row, cell.column)
+
+    override fun cellOf(elem: E): Cell = Cell(list.indexOf(elem) / width, list.indexOf(elem) % width)
 
     override fun set(row: Int, column: Int, value: E) {
         list[row * width + column] = value

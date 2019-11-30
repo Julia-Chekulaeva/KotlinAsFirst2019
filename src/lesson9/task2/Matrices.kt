@@ -3,9 +3,11 @@
 package lesson9.task2
 
 import kotlinx.html.I
+import lesson9.task1.Cell
 import lesson9.task1.Matrix
 import lesson9.task1.MatrixImpl
 import lesson9.task1.createMatrix
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
@@ -308,7 +310,20 @@ operator fun Matrix<Int>.times(other: Matrix<Int>): Matrix<Int> = TODO(this.toSt
  * 0  4 13  6
  * 3 10 11  8
  */
-fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> = TODO()
+fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
+    var cellOfZero = matrix.cellOf(0)
+    var row = cellOfZero.row
+    var column = cellOfZero.column
+    for (move in moves) {
+        val cellOfElem = matrix.cellOf(move)
+        if (abs(cellOfElem.row - row) + abs(cellOfElem.column - column) > 1) throw IllegalStateException()
+        matrix[row, column] = move
+        row = cellOfElem.row
+        column = cellOfElem.column
+        matrix[row, column] = 0
+    }
+    return matrix
+}
 
 /**
  * Очень сложная
