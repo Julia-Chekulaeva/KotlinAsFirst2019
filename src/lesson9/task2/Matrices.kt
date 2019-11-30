@@ -77,7 +77,7 @@ fun goingBySpiral(height: Int, width: Int, jump: Int): Matrix<Int> {
             i += jump
             column++
         }
-        if (i > height * width) break
+        if (i > iFin) break
         row++
         column--
         while (row < height && matrix[row, column] == 0) {
@@ -85,7 +85,7 @@ fun goingBySpiral(height: Int, width: Int, jump: Int): Matrix<Int> {
             i += jump
             row++
         }
-        if (i > height * width) break
+        if (i > iFin) break
         column--
         row--
         while (column > -1 && matrix[row, column] == 0) {
@@ -93,7 +93,7 @@ fun goingBySpiral(height: Int, width: Int, jump: Int): Matrix<Int> {
             i += jump
             column--
         }
-        if (i > height * width) break
+        if (i > iFin) break
         row--
         column++
         while (row > -1 && matrix[row, column] == 0) {
@@ -103,6 +103,8 @@ fun goingBySpiral(height: Int, width: Int, jump: Int): Matrix<Int> {
         }
         column++
         row++
+        i++
+        i -= jump
     }
     return matrix
 }
