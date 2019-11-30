@@ -63,7 +63,8 @@ class MatrixImpl<E>(override val height: Int, override val width: Int) : Matrix<
 
     private val list = MutableList<E?>(height * width) { null }
 
-    override fun get(row: Int, column: Int): E = list[row * width + column] ?: throw IndexOutOfBoundsException()
+    override fun get(row: Int, column: Int): E = if (column < width && row < height) list[row * width + column]!!
+    else throw IndexOutOfBoundsException()
 
     override fun get(cell: Cell): E = get(cell.row, cell.column)
 

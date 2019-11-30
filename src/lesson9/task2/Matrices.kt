@@ -2,9 +2,12 @@
 
 package lesson9.task2
 
+import kotlinx.html.I
 import lesson9.task1.Matrix
 import lesson9.task1.MatrixImpl
 import lesson9.task1.createMatrix
+import kotlin.math.max
+import kotlin.math.min
 
 // Все задачи в этом файле требуют наличия реализации интерфейса "Матрица" в Matrix.kt
 
@@ -61,15 +64,17 @@ operator fun Matrix<Int>.plus(other: Matrix<Int>): Matrix<Int> {
  * 10 11 12  5
  *  9  8  7  6
  */
-fun generateSpiral(height: Int, width: Int): Matrix<Int> {
+
+fun goingBySpiral(height: Int, width: Int, jump: Int): Matrix<Int> {
     val matrix = createMatrix(height, width, 0)
     var row = 0
     var column = 0
     var i = 1
-    while (i <= height * width) {
+    val iFin = if (jump == 1) height * width else (min(height, width) + 1) / 2
+    while (i <= iFin) {
         while (column < width && matrix[row, column] == 0) {
             matrix[row, column] = i
-            i++
+            i += jump
             column++
         }
         if (i > height * width) break
@@ -77,23 +82,23 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> {
         column--
         while (row < height && matrix[row, column] == 0) {
             matrix[row, column] = i
-            i++
+            i += jump
             row++
         }
         if (i > height * width) break
         column--
         row--
-        while (row > -1 && matrix[row, column] == 0) {
+        while (column > -1 && matrix[row, column] == 0) {
             matrix[row, column] = i
-            i++
+            i += jump
             column--
         }
         if (i > height * width) break
         row--
         column++
-        while (matrix[row, column] == 0) {
+        while (row > -1 && matrix[row, column] == 0) {
             matrix[row, column] = i
-            i++
+            i += jump
             row--
         }
         column++
@@ -101,6 +106,8 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> {
     }
     return matrix
 }
+
+fun generateSpiral(height: Int, width: Int): Matrix<Int> = goingBySpiral(height, width, 1)
 
 /**
  * Сложная
@@ -116,7 +123,7 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> {
  *  1  2  2  2  2  1
  *  1  1  1  1  1  1
  */
-fun generateRectangles(height: Int, width: Int): Matrix<Int> = TODO()
+fun generateRectangles(height: Int, width: Int): Matrix<Int> = goingBySpiral(height, width, 0)
 
 /**
  * Сложная
@@ -131,7 +138,21 @@ fun generateRectangles(height: Int, width: Int): Matrix<Int> = TODO()
  * 10 13 16 18
  * 14 17 19 20
  */
-fun generateSnake(height: Int, width: Int): Matrix<Int> = TODO()
+fun generateSnake(height: Int, width: Int): Matrix<Int> {
+    val matrix = createMatrix(height, width, 0)
+    var count = 1
+    for (i in 0 until height + width - 1) {
+        var column = min(width - 1, i)
+        var row = max(0, i - width + 1)
+        while (row < height && column >= 0) {
+            matrix[row, column] = count
+            row++
+            column--
+            count++
+        }
+    }
+    return matrix
+}
 
 /**
  * Средняя
