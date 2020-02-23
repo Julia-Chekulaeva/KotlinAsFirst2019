@@ -318,7 +318,7 @@ fun cellOf(matrix: Matrix<Int>, elem: Int): Cell {
 }
 
 fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
-    var cellOfZero = cellOf(matrix, 0)
+    val cellOfZero = cellOf(matrix, 0)
     var row = cellOfZero.row
     var column = cellOfZero.column
     for (move in moves) {
