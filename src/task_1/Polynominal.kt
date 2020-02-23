@@ -7,7 +7,7 @@ data class Polynominal private constructor(val coefficients: List<Double>) {
 
     val degree = coefficients.lastIndex
 
-    val reversedCoeffs = coefficients.reversed()
+    private val reversedCoeffs = coefficients.reversed()
 
     operator fun plus(other: Polynominal): Polynominal {
         val list = other.reversedCoeffs
