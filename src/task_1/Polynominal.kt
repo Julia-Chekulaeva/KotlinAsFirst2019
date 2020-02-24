@@ -10,7 +10,7 @@ data class Polynominal private constructor(val coefficients: List<Double>) {
     private val reversedCoeffs = coefficients.reversed()
 
     operator fun plus(other: Polynominal): Polynominal {
-        val list = other.reversedCoeffs
+        val list = other.reversedCoeffs // Почему это работает, если свойство приватное...
         return if (degree > other.degree) Polynominal((list.withIndex().map { it.value + reversedCoeffs[it.index] }
                 + reversedCoeffs.subList(other.degree + 1, degree + 1)).reversed())
         else Polynominal((reversedCoeffs.withIndex().map { it.value + list[it.index] }
