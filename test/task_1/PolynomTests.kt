@@ -21,4 +21,10 @@ class PolynominalTests {
             Polynominal(2.0, -3.0, 2.0) + Polynominal(4.0, 1.0, 5.0, 1.0)
         )
     }
+
+    @Test
+    @Tag("Example")
+    fun minus() {
+
+    }
 }
