@@ -12,9 +12,9 @@ data class Polynominal private constructor(val coefficients: List<Double>) {
     operator fun plus(other: Polynominal): Polynominal {
         val list = other.reversedCoeffs
         return if (degree > other.degree) Polynominal((list.withIndex().map { it.value + reversedCoeffs[it.index] }
-                + reversedCoeffs.subList(other.degree, degree)).reversed())
+                + reversedCoeffs.subList(other.degree + 1, degree + 1)).reversed())
         else Polynominal((reversedCoeffs.withIndex().map { it.value + list[it.index] }
-                + list.subList(degree, other.degree)).reversed())
+                + list.subList(degree + 1, other.degree + 1)).reversed())
     }
 
     operator fun minus(other: Polynominal): Polynominal = plus(Polynominal(other.coefficients.map { -it }))
@@ -53,7 +53,7 @@ data class Polynominal private constructor(val coefficients: List<Double>) {
     }
 
     override fun equals(other: Any?): Boolean {
-        //return super.equals(other) // Что это?
+        //return super.equals(other)
         require(other is Polynominal)
         return coefficients == other.coefficients
     }
@@ -61,11 +61,5 @@ data class Polynominal private constructor(val coefficients: List<Double>) {
     override fun hashCode() = coefficients.hashCode()
 
     override fun toString() =
-        coefficients.withIndex().joinToString(" + ") { "${it.value} * x^${degree - it.index}" }.removeSuffix(" * x^0") // Мда, не идеально
+        coefficients.withIndex().joinToString(" + ") { "${it.value} * x^${degree - it.index}" }.removeSuffix(" * x^0")
 }
-/*(StringBuilder("${coefficients[0]} * x^$degree") {
-        str, elem ->
-        {
-            str.append("${elem.value} * x^${degree - elem.index}")
-        }
-    }.toString()*/

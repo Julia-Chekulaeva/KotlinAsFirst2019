@@ -7,8 +7,11 @@ data class ComplexNumber constructor(val x: Double, val y: Double) {
     constructor(number: Pair<Double, Double>) : this(number.first, number.second)
 
     constructor(str: String) : this(
-        str.split(" * i")[0].toDoubleOrNull() ?: throw IllegalArgumentException(),
-        str.split(" * i + ", " * i - ")[1].toDoubleOrNull() ?: throw IllegalArgumentException()
+        if (!str.matches(Regex("""-?\d+(\.\d+)? \* i [+-] \d+(\.\d+)?"""))) throw IllegalArgumentException()
+        else
+            str.split(" * i")[0].toDouble(),
+        if (str.contains("+")) str.split(" * i + ")[1].toDouble()
+        else -str.split(" * i - ")[1].toDouble()
     )
     // Для корректного использования конструктора в этом случае все же нужна корректная строка
 

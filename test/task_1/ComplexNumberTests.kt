@@ -59,6 +59,20 @@ class ComplexNumberTests {
 
     @Test
     @Tag("Example")
+    fun toStringOverride() {
+        assertEquals("1.0 * i + 3.0", ComplexNumber(1.0, 3.0).toString())
+        assertEquals("-1.0 * i - 3.0", ComplexNumber(-1.0, -3.0).toString())
+    }
+
+    @Test
+    @Tag("Example")
+    fun constructor() {
+        assertEquals(ComplexNumber(1.0, 3.0), ComplexNumber("1.0 * i + 3.0"))
+        assertEquals(ComplexNumber(-1.0, -3.0), ComplexNumber("-1.0 * i - 3.0"))
+    }
+
+    @Test
+    @Tag("Example")
     fun equals() {
         assertEquals(true, ComplexNumber(0.7, 8.0) == ComplexNumber(0.7, 8.0))
         assertEquals(false, ComplexNumber(4.0, 6.0) == ComplexNumber(4.0, 8.0))
