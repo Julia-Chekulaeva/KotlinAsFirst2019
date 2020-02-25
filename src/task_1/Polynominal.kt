@@ -11,8 +11,8 @@ data class Polynominal private constructor(val coefficients: List<Double>) {
 
     operator fun plus(other: Polynominal): Polynominal {
         val list = other.reversedCoeffs // Почему это работает, если свойство приватное...
-        return if (degree > other.degree) Polynominal((list.withIndex().map { it.value + reversedCoeffs[it.index] }
-                + reversedCoeffs.subList(other.degree + 1, degree + 1)).reversed())
+        return if (degree > other.degree) Polynominal(*(list.withIndex().map { it.value + reversedCoeffs[it.index] }
+                + reversedCoeffs.subList(other.degree + 1, degree + 1)).reversed().toDoubleArray())
         else Polynominal((reversedCoeffs.withIndex().map { it.value + list[it.index] }
                 + list.subList(degree + 1, other.degree + 1)).reversed())
     }
@@ -32,16 +32,16 @@ data class Polynominal private constructor(val coefficients: List<Double>) {
     }
 
     private fun division(other: Polynominal): Pair<Polynominal, Polynominal> {
-        val dividedPolynCoeffs = coefficients.toMutableList()
+        val dividedPolynomCoeffs = coefficients.toMutableList()
         val divisiorCoeff = other.coefficients[0]
         val list = mutableListOf<Double>()
         for (i in degree - other.degree downTo 0) {
-            val a = dividedPolynCoeffs[0] / divisiorCoeff
+            val a = dividedPolynomCoeffs[0] / divisiorCoeff
             list.add(a)
-            other.coefficients.withIndex().forEach { dividedPolynCoeffs[it.index] -= it.value * a }
-            dividedPolynCoeffs.removeAt(0)
+            other.coefficients.withIndex().forEach { dividedPolynomCoeffs[it.index] -= it.value * a }
+            dividedPolynomCoeffs.removeAt(0)
         }
-        return Polynominal(list) to Polynominal(dividedPolynCoeffs)
+        return Polynominal(list) to Polynominal(dividedPolynomCoeffs)
     }
 
     operator fun div(other: Polynominal): Polynominal = division(other).first
