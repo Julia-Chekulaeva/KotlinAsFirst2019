@@ -21,15 +21,19 @@ package lesson11.task1
  */
 class Polynom(vararg coeffs: Double) {
 
+    val coefficients = coeffs.toList().dropWhile { it == 0.0 }
+
     /**
      * Геттер: вернуть значение коэффициента при x^i
      */
-    fun coeff(i: Int): Double = TODO()
+    fun coeff(i: Int): Double = coefficients[i]
 
     /**
      * Расчёт значения при заданном x
      */
-    fun getValue(x: Double): Double = TODO()
+    fun getValue(x: Double): Double = coefficients.fold(0.0) { prev, coeff ->
+        prev * x + coeff
+    }
 
     /**
      * Степень (максимальная степень x при ненулевом слагаемом, например 2 для x^2+x+1).
@@ -38,7 +42,7 @@ class Polynom(vararg coeffs: Double) {
      * Слагаемые с нулевыми коэффициентами игнорировать, т.е.
      * степень 0x^2+0x+2 также равна 0.
      */
-    fun degree(): Int = TODO()
+    fun degree(): Int = coefficients.size
 
     /**
      * Сложение
