@@ -2,16 +2,16 @@ package task_1
 
 //import kotlin.IllegalArgumentException
 
-data class ComplexNumber constructor(val x: Double, val y: Double) {
+data class ComplexNumber(val x: Double, val y: Double) {
 
     constructor(number: Pair<Double, Double>) : this(number.first, number.second)
 
     constructor(str: String) : this(
-        if (!str.matches(Regex("""-?\d+(\.\d+)? \* i [+-] \d+(\.\d+)?"""))) throw IllegalArgumentException()
+        if (!str.matches(Regex("""-?\d+(\.\d+)?\*i[+-]\d+(\.\d+)?"""))) throw IllegalArgumentException()
         else
-            str.split(" * i")[0].toDouble(),
-        if (str.contains("+")) str.split(" * i + ")[1].toDouble()
-        else -str.split(" * i - ")[1].toDouble()
+            str.split("*i")[0].toDouble(),
+        if (str.contains("+")) str.split("+")[1].removeSuffix("i").toDouble()
+        else -str.split("-")[1].removeSuffix("i").toDouble()
     )
     // Для корректного использования конструктора в этом случае все же нужна корректная строка
 
