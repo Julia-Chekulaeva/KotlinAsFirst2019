@@ -53,10 +53,12 @@ class Polynom(vararg coeffs: Double) {
      */
     operator fun plus(other: Polynom): Polynom {
         val list = other.reversedCoeffs
-        return if (degree() > other.degree()) Polynom(*(list.withIndex().map { it.value + reversedCoeffs[it.index] }
-                + reversedCoeffs.subList(other.degree() + 1, degree() + 1)).reversed().toDoubleArray())
-        else Polynom(*(reversedCoeffs.withIndex().map { it.value + list[it.index] }
-                + list.subList(degree() + 1, other.degree() + 1)).reversed().toDoubleArray())
+        return if (degree() > other.degree()) Polynom(*(list.withIndex().map {
+            it.value + reversedCoeffs[it.index]
+        } + reversedCoeffs.subList(other.degree() + 1, degree() + 1)).reversed().toDoubleArray())
+        else Polynom(*(reversedCoeffs.withIndex().map {
+            it.value + list[it.index]
+        } + list.subList(degree() + 1, other.degree() + 1)).reversed().toDoubleArray())
     }
 
     /**

@@ -41,4 +41,12 @@ internal class ComplexTest {
         assertApproxEquals(Complex(1.0, 2.0), Complex("1+2i"), 1e-12)
         assertApproxEquals(Complex(1.0, 0.0), Complex(1.0), 1e-12)
     }
+
+    @Test
+    fun toStringOverride() {
+        assertEquals("1+2i", Complex(1.0, 2.0).toString())
+        assertEquals("1-2i", Complex(1.0, -2.0).toString())
+        assertEquals("-7+5i", Complex(-7.0, 5.0).toString())
+        assertEquals("-7-5i", Complex(-7.0, -5.0).toString())
+    }
 }

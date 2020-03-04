@@ -24,14 +24,14 @@ class Complex(val re: Double, val im: Double) {
     constructor(str: String) : this(
         if (!str.matches(Regex("""\-?\d+(\.\d+)?[+-]\d+(\.\d+)?i"""))) throw IllegalArgumentException()
         else
-            str.split("+", "-")[0].toDouble(),
-        if (str.contains("+")) str.split("+")[1].removeSuffix("i").toDouble()
-        else -str.split("-")[1].removeSuffix("i").toDouble()
+            str.removePrefix("-").removeSuffix("i").split("+", "-"), str[0] != '-', str.contains("+")
     )
 
-    /**
-     * Сложение.
-     */
+    private constructor(list: List<String>, sign1: Boolean, sign2: Boolean) : this(
+        if (sign1) list[0].toDouble() else -list[0].toDouble(),
+        if (sign2) list[1].toDouble() else -list[1].toDouble()
+    )
+
     operator fun plus(other: Complex) = Complex(re + other.re, im + other.im)
 
     /**
@@ -67,8 +67,14 @@ class Complex(val re: Double, val im: Double) {
      */
     override fun equals(other: Any?) = other is Complex && other.im == im && other.re == re
 
+    override fun hashCode() = re.hashCode() + im.hashCode()
+
     /**
      * Преобразование в строку
      */
-    override fun toString(): String = "$re+${im}i"
+    override fun toString(): String = if (re % 1.0 == 0.0) {
+        if (im >= 0.0) "${re.toInt()}+${im.toInt()}i" else "${re.toInt()}${im.toInt()}i"
+    } else {
+        if (im >= 0.0) "$re+${im}i" else "$re${im}i"
+    }
 }
