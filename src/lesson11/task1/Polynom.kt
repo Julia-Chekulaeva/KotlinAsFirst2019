@@ -2,6 +2,9 @@
 
 package lesson11.task1
 
+import kotlin.math.abs
+import kotlin.math.min
+
 /**
  * Класс "полином с вещественными коэффициентами".
  *
@@ -24,8 +27,6 @@ fun notEmptyList(list: List<Double>) = if (list.isEmpty()) listOf(0.0) else list
 class Polynom(vararg coeffs: Double) {
 
     val coefficients = notEmptyList(coeffs.toList().dropWhile { it == 0.0 })
-
-    private val reversedCoeffs = coefficients.reversed()
 
     /**
      * Геттер: вернуть значение коэффициента при x^i
@@ -52,13 +53,20 @@ class Polynom(vararg coeffs: Double) {
      * Сложение
      */
     operator fun plus(other: Polynom): Polynom {
-        val list = other.reversedCoeffs
-        return if (degree() > other.degree()) Polynom(*(list.withIndex().map {
-            it.value + reversedCoeffs[it.index]
-        } + reversedCoeffs.subList(other.degree() + 1, degree() + 1)).reversed().toDoubleArray())
-        else Polynom(*(reversedCoeffs.withIndex().map {
-            it.value + list[it.index]
-        } + list.subList(degree() + 1, other.degree() + 1)).reversed().toDoubleArray())
+        val list = other.coefficients
+        val d = degree() - other.degree()
+        return if (d > 0) Polynom(
+            *(coefficients.subList(0, d) +
+                    list.withIndex().map {
+                        it.value + coefficients[it.index + d]
+                    }).toDoubleArray()
+        )
+        else Polynom(
+            *(list.subList(0, -d) +
+                    coefficients.withIndex().map {
+                        it.value + list[it.index - d]
+                    }).toDoubleArray()
+        )
     }
 
     /**
@@ -76,8 +84,8 @@ class Polynom(vararg coeffs: Double) {
      */
     operator fun times(other: Polynom): Polynom {
         val list = MutableList(degree() + other.degree() + 1) { 0.0 }
-        val list1 = reversedCoeffs.withIndex()
-        val list2 = other.reversedCoeffs.withIndex()
+        val list1 = coefficients.reversed().withIndex()
+        val list2 = other.coefficients.reversed().withIndex()
         for ((i, coeff1) in list1)
             for ((j, coeff2) in list2)
                 list[i + j] += coeff1 * coeff2
