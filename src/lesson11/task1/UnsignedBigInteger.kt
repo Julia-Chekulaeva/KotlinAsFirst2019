@@ -15,8 +15,11 @@ import kotlin.math.min
  * преобразование в строку/из строки, преобразование в целое/из целого,
  * сравнение на равенство и неравенство
  */
-class UnsignedBigInteger(val number: List<Int>) : Comparable<UnsignedBigInteger> {
+class UnsignedBigInteger private constructor(numberWithZeroes: List<Int>) : Comparable<UnsignedBigInteger> {
 
+    private fun zero(list: List<Int>) = if (list.isEmpty()) listOf(0) else list
+
+    val number = zero(numberWithZeroes.dropLastWhile { it == 0 })
     /**
      * Конструктор из строки
      */
@@ -58,25 +61,26 @@ class UnsignedBigInteger(val number: List<Int>) : Comparable<UnsignedBigInteger>
             throw ArithmeticException()
         val list = mutableListOf<Int>()
         var c = 1
-        val min = min(number.size, otherNumber.size)
-        val diff = number.size - otherNumber.size
-        val maxNumber = if (diff > 0) number else otherNumber.map { -it }
-        for (i in 0 until min) {
+        val otherSize = otherNumber.size
+        val thisSize = number.size
+        for (i in 0 until otherSize) {
             val s = number[i] - otherNumber[i] + 10 + c - 1
             list.add((s % 10))
             c = s / 10
         }
-        if (diff != 0) {
-            list.add((c + maxNumber[min] - 1))
-            list.addAll(maxNumber.subList(min + 1, min + diff))
+        for (i in otherSize until thisSize) {
+            val s = number[i] + 10 + c - 1
+            list.add((s % 10))
+            c = s / 10
         }
-        return UnsignedBigInteger(list.dropLastWhile { it == 0 })
+        return UnsignedBigInteger(list)
     }
 
     /**
      * Умножение
      */
     operator fun times(other: UnsignedBigInteger): UnsignedBigInteger {
+        if (other.toString() == "0") return UnsignedBigInteger(0)
         val list1 = number.withIndex()
         val list2 = other.number.withIndex()
         val size = number.size + other.number.size
@@ -90,28 +94,77 @@ class UnsignedBigInteger(val number: List<Int>) : Comparable<UnsignedBigInteger>
         return UnsignedBigInteger(list)
     }
 
+    operator fun times(other: Int): UnsignedBigInteger {
+        if (other == 0) return UnsignedBigInteger(0)
+        var a: Int
+        val list = mutableListOf(0)
+        for ((i, digit) in number.withIndex()) {
+            a = list[i] + digit * other
+            list[i] = a % 10
+            list.add(a / 10)
+        }
+        return UnsignedBigInteger(list)
+    }
+
+    private fun division(other: UnsignedBigInteger): Pair<List<Int>, List<Int>> {
+        var dividedNumber = number.reversed()
+        val divSize = dividedNumber.size
+        val divisior = other.number.reversed()
+        val size = divisior.size
+        val div = mutableListOf<Int>()
+        var diff = UnsignedBigInteger(0)
+        val index = dividedNumber.size - divisior.size
+        val multiply = mutableListOf<UnsignedBigInteger>()
+        for (i in 0..9)
+            multiply.add(other * i)
+        for (digit in 0..index) {
+            val dividedPart = UnsignedBigInteger(dividedNumber.subList(0, size + digit).reversed())
+            for (i in 9 downTo 0) {
+                if (multiply[i] <= dividedPart) {
+                    diff = dividedPart - multiply[i]
+                    div.add(i)
+                    println("$diff = $dividedPart - ${multiply[i]}")
+                    dividedNumber = diff.number.reversed() + dividedNumber.subList(size + digit, dividedNumber.size)
+                    dividedNumber = List(divSize - dividedNumber.size) { 0 } + dividedNumber
+                    break
+                }
+            }
+        }
+        return div.reversed() to diff.number
+    }
+
     /**
      * Деление
      */
-    operator fun div(other: UnsignedBigInteger): UnsignedBigInteger = TODO()
+    operator fun div(other: UnsignedBigInteger) = UnsignedBigInteger(division(other).first)
 
     /**
      * Взятие остатка
      */
-    operator fun rem(other: UnsignedBigInteger): UnsignedBigInteger = TODO()
+    operator fun rem(other: UnsignedBigInteger) = UnsignedBigInteger(division(other).second)
 
     /**
      * Сравнение на равенство (по контракту Any.equals)
      */
-    override fun equals(other: Any?): Boolean = other is UnsignedBigInteger && number == other.number
+    override fun equals(other: Any?) = other is UnsignedBigInteger && number == other.number
+
+    override fun hashCode() = number.hashCode()
 
     /**
      * Сравнение на больше/меньше (по контракту Comparable.compareTo)
      */
     override fun compareTo(other: UnsignedBigInteger): Int {
-        val diff = Int.MAX_VALUE.toString().lastIndex
-        return this.toString().substring(max(number.size - diff, 0)).toInt() -
-                other.toString().substring(max(other.number.size - diff, 0)).toInt()
+        val a = number.size - other.number.size
+        if (a > 0) return 1
+        if (a < 0) return -1
+        if (a == 0) {
+            for ((i, n) in other.number.withIndex().reversed()) {
+                if (n == number[i]) continue
+                if (number[i] > n) return 1
+                return -1
+            }
+        }
+        return 0
     }
 
     /**
