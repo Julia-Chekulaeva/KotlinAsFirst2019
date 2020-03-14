@@ -1,7 +1,6 @@
 package lesson11.task1
 
 import java.lang.ArithmeticException
-import kotlin.math.max
 import kotlin.math.min
 
 /**
@@ -94,17 +93,24 @@ class UnsignedBigInteger private constructor(numberWithZeroes: List<Int>) : Comp
         return UnsignedBigInteger(list)
     }
 
-    operator fun times(other: Int): UnsignedBigInteger {
+    operator fun times(other: Int) = this * UnsignedBigInteger(other)/*{
         if (other == 0) return UnsignedBigInteger(0)
-        var a: Int
         val list = mutableListOf(0)
-        for ((i, digit) in number.withIndex()) {
-            a = list[i] + digit * other
-            list[i] = a % 10
-            list.add(a / 10)
+        for (digit in number) {
+            list.add(digit * other)
+        }
+        var lastIndex = list.lastIndex
+        for (i in 0 until lastIndex) {
+            list[i + 1] += list[i] / 10
+            list[i] %= 10
+        }
+        while (list[lastIndex] > 0) {
+            list.add(list[lastIndex] / 10)
+            list[lastIndex] %= 10
+            lastIndex = list.lastIndex
         }
         return UnsignedBigInteger(list)
-    }
+    }*/
 
     private fun division(other: UnsignedBigInteger): Pair<List<Int>, List<Int>> {
         var dividedNumber = number.reversed()
@@ -177,16 +183,7 @@ class UnsignedBigInteger private constructor(numberWithZeroes: List<Int>) : Comp
      * Если число не влезает в диапазон Int, бросить ArithmeticException
      */
     fun toInt(): Int {
-        val maxInt = Int.MAX_VALUE.toString().map { it.toInt() }
-        val a = number.size - maxInt.size
-        if (a > 0) throw ArithmeticException()
-        if (a == 0) {
-            for ((i, n) in number.withIndex()) {
-                if (n == maxInt[i]) continue
-                if (n > maxInt[i]) throw ArithmeticException()
-                break
-            }
-        }
+        if (this > UnsignedBigInteger(Int.MAX_VALUE)) throw ArithmeticException()
         return number.reversed().fold(0) { prev, num ->
             prev * 10 + num
         }
