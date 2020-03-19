@@ -33,6 +33,13 @@ class TestsPackPLE {
         assertEquals(
             File("input/task2_input/SomeText.txt").readText(), File("input/task2_input/SomeTextFromRLE.txt").readText()
         )
+        File("input/task2_input/resOfTask2.txt").delete()
+        File("input/task2_input/task2.rle").delete()
+        File("input/task2_input/resOfTask2RLE.txt").delete()
+        File("input/task2_input/task2RLE.rle").delete()
+        File("input/task2_input/resOfSomeText.txt").delete()
+        File("input/task2_input/SomeTextRLE.rle").delete()
+        File("input/task2_input/SomeTextFromRLE.txt").delete()
     }
 
 }
